@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+ <body>
+    <canvas id='scale_1px' style='display:none;'></canvas>
+    <canvas id='scale' style='display:none;' onClick='hide("scale")'></canvas>
+    <div id='start_form'>
+	<form>
+	    <div>Size A in millimetres: <input id='sizeA' type=text value=190></div>
+	    <div>Coin size in millimetres: <input id='coinSize' type=text value=26></div>
+	    <input type=button value=Generate onClick='generate()'>
+	    <br><br>
+	</form>
+    <div>Example for A4, the size A is different for each printer model.</div>
+    <img src="../../../../images/sample.jpg">
+    </div>
+    <div id=images style='display:none;' >
+	<div id=info style='text-align: center;'><input type=button onClick='hide("info")' value="click on image to dissapears..."></div>
+    </div>
+ </body>
+<script>
+
+    var dpi = 300;
+    var mm_in = 25.4;
+    var c_width;
+    var mm_width;
+
+	const coins = ["1) SuperChargers/fruitsnack's astroblast.png","1) SuperChargers/fruitsnack's big bubble pop fizz.png","1) SuperChargers/fruitsnack's bone bash roller brawl.png","1) SuperChargers/fruitsnack's deep dive gill grunt.png","1) SuperChargers/fruitsnack's dive clops.png","1) SuperChargers/fruitsnack's double dare trigger happy.png","1) SuperChargers/fruitsnack's fiesta.png","1) SuperChargers/fruitsnack's hammer slam bowser.png","1) SuperChargers/fruitsnack's high volt.png","1) SuperChargers/fruitsnack's hurricane jet vac.png","1) SuperChargers/fruitsnack's lava lance eruptor.png","1) SuperChargers/fruitsnack's nightfall.png","1) SuperChargers/fruitsnack's shark shooter terrafin.png","1) SuperChargers/fruitsnack's smash hit.png","1) SuperChargers/fruitsnack's splat.png","1) SuperChargers/fruitsnack's splitfire.png","1) SuperChargers/fruitsnack's stormblade.png","1) SuperChargers/fruitsnack's super shot stealth elf.png","1) SuperChargers/fruitsnack's thrillipede.png","1) SuperChargers/fruitsnack's turbo charge donkey kong.png","2) Vehicles/Air Vehicles/fruitsnack's buzz wing.png","2) Vehicles/Air Vehicles/fruitsnack's clown cruiser.png","2) Vehicles/Air Vehicles/fruitsnack's jet stream.png","2) Vehicles/Air Vehicles/fruitsnack's sky slicer.png","2) Vehicles/Air Vehicles/fruitsnack's stealth stinger.png","2) Vehicles/Air Vehicles/fruitsnack's sun runner.png","2) Vehicles/Land Vehicles/fruitsnack's barrel blaster.png","2) Vehicles/Land Vehicles/fruitsnack's burn-cycle.png","2) Vehicles/Land Vehicles/fruitsnack's crypt crusher.png","2) Vehicles/Land Vehicles/fruitsnack's gold rusher.png","2) Vehicles/Land Vehicles/fruitsnack's hot streak.png","2) Vehicles/Land Vehicles/fruitsnack's shark tank.png","2) Vehicles/Land Vehicles/fruitsnack's shield striker.png","2) Vehicles/Land Vehicles/fruitsnack's thump truck.png","2) Vehicles/Land Vehicles/fruitsnack's tomb buggy.png","2) Vehicles/Sea Vehicles/fruitsnack's dive bomber.png","2) Vehicles/Sea Vehicles/fruitsnack's reef ripper.png","2) Vehicles/Sea Vehicles/fruitsnack's sea shadow.png","2) Vehicles/Sea Vehicles/fruitsnack's soda skimmer.png","2) Vehicles/Sea Vehicles/fruitsnack's splatter splasher.png","3) Magic Items/fruitsnack's kaos trophy.png","3) Magic Items/fruitsnack's land trophy.png","3) Magic Items/fruitsnack's sea trophy.png","3) Magic Items/fruitsnack's sky trophy.png","4) Eon's Elite/fruitsnack's elite boomer.png","4) Eon's Elite/fruitsnack's elite dino-rang.png","4) Eon's Elite/fruitsnack's elite ghost roaster.png","4) Eon's Elite/fruitsnack's elite slam bam.png","4) Eon's Elite/fruitsnack's elite voodood.png","4) Eon's Elite/fruitsnack's elite zook.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's birthday bash big bubble pop fizz.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's dark hammer slam bowser.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's dark spitfire.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's dark super shot stealth elf.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's dark turbo charge donkey kong.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's eggcited trillipede.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's frightful fiesta.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's missile-tow dive-clops.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's power blue splat.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's power blue trigger happy.png","5) In-Game Variant SuperChargers/1) In-Game Variants/fruitsnack's steel plated smash hit.png","5) In-Game Variant SuperChargers/2) Legendaries/fruitsnack's legendary astroblast.png","5) In-Game Variant SuperChargers/2) Legendaries/fruitsnack's legendary bone bash roller brawl.png","5) In-Game Variant SuperChargers/2) Legendaries/fruitsnack's legendary hurricane jet-vac.png","6) In-Game Variant Vehicles/1) In-Game Variants/Air Vehicles/fruitsnack's dark clown cruiser.png","6) In-Game Variant Vehicles/1) In-Game Variants/Air Vehicles/fruitsnack's nitro stealth stinger.png","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/fruitsnack's dark barrel blaster.png","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/fruitsnack's dark hot streak .png","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/fruitsnack's event exclusive hot streak.png","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/fruitsnack's golden hot streak.png","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/fruitsnack's mobile hot streak.png","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/fruitsnack's power blue gold rusher.png","6) In-Game Variant Vehicles/1) In-Game Variants/Sea Vehicles/fruitsnack's dark sea shadow.png","6) In-Game Variant Vehicles/1) In-Game Variants/Sea Vehicles/fruitsnack's nitro soda skimmer.png","6) In-Game Variant Vehicles/1) In-Game Variants/Sea Vehicles/fruitsnack's power blue splatter splasher.png","6) In-Game Variant Vehicles/1) In-Game Variants/Sea Vehicles/fruitsnack's spring ahead dive bomber.png","6) In-Game Variant Vehicles/2) Legendaries/fruitsnack's legendary sun runner.png"];
+
+
+    function init_scale(width, dpi)
+    {
+	var canvas = document.getElementById("scale_1px");
+	var font_height = 8;
+	var c_height = 30;
+	var s_height = c_height / 2 - 1;
+
+	c_width = width / mm_in * dpi;
+	mm_width = width;
+
+	canvas.width = parseInt(c_width);
+	canvas.height = 1;
+
+	canvas = document.getElementById("scale");
+
+	canvas.width = parseInt(c_width);
+	canvas.height = c_height;
+
+	const ctx = canvas.getContext("2d");
+	
+	ctx.font = font_height + "px serif";
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - 2, 0);
+	ctx.lineTo(canvas.width - 2, c_height);
+	ctx.stroke();
+	
+	for ( i = 0 ; i < width ; i++ )
+	{
+	    pos = i / width * c_width + 1;
+
+	    if ( i % 10 == 0 )
+	    {
+		ctx.fillText( i + " mm", pos + 4, c_height - s_height + font_height );
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		ctx.lineWidth = 1;
+		h = s_height / 2;
+	    }
+
+	    ctx.beginPath();
+	    ctx.moveTo(pos, c_height);
+	    ctx.lineTo(pos, c_height - h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in * 16; i++ )
+	{
+	    pos = i * mm_in / 16 / width * c_width + 1;
+	    h = 10;
+	    if ( i % 16 == 0 )
+	    {
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		if ( i % 8 == 0 )
+		{
+		    h = s_height * 3 / 4;
+		    ctx.lineWidth = 2;
+		}
+		else
+		{
+		    if ( i % 2 == 0 )
+			h = s_height * 3 / 5;
+		    else
+			h = s_height * 3 / 6;
+		}
+		ctx.lineWidth = 1;
+	    }
+	    ctx.beginPath();
+	    ctx.moveTo(pos, 0);
+	    ctx.lineTo(pos, h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in  ; i++ )
+	{
+	    pos = i * mm_in / width * c_width;
+	    ctx.fillText( i + " in", pos + 4, s_height);
+	}
+    }
+
+    function hide(id)
+    {
+	document.getElementById(id).style.display = "none";
+    }
+
+    function generate()
+    {
+	document.getElementById("scale").style.display = "inline";
+	document.getElementById("scale_1px").style.display = "inline";
+	document.getElementById("images").style.display = "inline";
+	init_scale(document.getElementById("sizeA").value, dpi);
+	hide("start_form");
+
+	coin_size = document.getElementById("coinSize").value;
+
+	var cs = parseInt(coin_size / mm_width * c_width);
+
+	imgs = document.getElementById("images");
+	for (let i=0; i < coins.length; i++)
+	{
+	    var img = document.createElement('img');
+            img.src = coins[i];
+
+	    
+	    img.style.height = cs + "px";
+	    img.style.width = cs + "px";
+	    img.id = 'im' + i;
+	    img.onclick = function(){hide('im' + i);}
+	    img.style.paddingRight = '2px';
+
+            imgs.appendChild(img);
+	}
+
+    }
+
+</script>
+</html>

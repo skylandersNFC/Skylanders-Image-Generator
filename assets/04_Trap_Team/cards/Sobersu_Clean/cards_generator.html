@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+ <body>
+    <canvas id='scale_1px' style='display:none;'></canvas>
+    <canvas id='scale' style='display:none;' onClick='hide("scale")'></canvas>
+    <div id='start_form'>
+	<form>
+	    <div>Size A in millimetres: <input id='sizeA' type=text value=190></div>
+	    <div>Card width in millimetres: <input id='cardSize' type=text value=54></div>
+	    <input type=button value=Generate onClick='generate()'>
+	    <br><br>
+	</form>
+    <div>Example for A4, the size A is different for each printer model.</div>
+    <img src="../../../../images/sample.jpg">
+    </div>
+    <div id=images style='display:none;' >
+	<div id=info style='text-align: center;'><input type=button onClick='hide("info")' value="click on image to dissapears..."></div>
+    </div>
+ </body>
+<script>
+
+    var dpi = 300;
+    var mm_in = 25.4;
+    var c_width;
+    var mm_width;
+
+	const cards = ["1) Trap Masters/Sobersu's BLASTERMIND_back.jpg","1) Trap Masters/Sobersu's BUSHWHACK_back.jpg","1) Trap Masters/Sobersu's ENIGMA_back.jpg","1) Trap Masters/Sobersu's GEARSHIFT_back.jpg","1) Trap Masters/Sobersu's GUSTO_back.jpg","1) Trap Masters/Sobersu's HEAD RUSH_back.jpg","1) Trap Masters/Sobersu's JAWBREAKER_back.jpg","1) Trap Masters/Sobersu's KA-BOOM_back.jpg","1) Trap Masters/Sobersu's KNIGHT LIGHT_back.jpg","1) Trap Masters/Sobersu's KNIGHT MARE_back.jpg","1) Trap Masters/Sobersu's KRYPT KING_back.jpg","1) Trap Masters/Sobersu's LOB-STAR_back.jpg","1) Trap Masters/Sobersu's SHORT CUT_back.jpg","1) Trap Masters/Sobersu's SNAP SHOT_back.jpg","1) Trap Masters/Sobersu's THUNDERBOLT_back.jpg","1) Trap Masters/Sobersu's TUFF LUCK_back.jpg","1) Trap Masters/Sobersu's WALLOP_back.jpg","1) Trap Masters/Sobersu's WILDFIRE_back.jpg","2) New (Series 1)/Sobersu's BAT SPIN_back.jpg","2) New (Series 1)/Sobersu's BLACKOUT_back.jpg","2) New (Series 1)/Sobersu's BLADES_back.jpg","2) New (Series 1)/Sobersu's CHOPPER_back.jpg","2) New (Series 1)/Sobersu's COBRA CADABRA_back.jpg","2) New (Series 1)/Sobersu's DEJA VU_back.jpg","2) New (Series 1)/Sobersu's ECHO_back.jpg","2) New (Series 1)/Sobersu's FIST BUMP_back.jpg","2) New (Series 1)/Sobersu's FLING KONG_back.jpg","2) New (Series 1)/Sobersu's FLIP WRECK_back.jpg","2) New (Series 1)/Sobersu's FOOD FIGHT_back.jpg","2) New (Series 1)/Sobersu's FUNNY BONE_back.jpg","2) New (Series 1)/Sobersu's HIGH FIVE_back.jpg","2) New (Series 1)/Sobersu's ROCKY ROLL_back.jpg","2) New (Series 1)/Sobersu's SPOTLIGHT_back.jpg","2) New (Series 1)/Sobersu's TORCH_back.jpg","2) New (Series 1)/Sobersu's TRAIL BLAZER_back.jpg","2) New (Series 1)/Sobersu's TREAD HEAD_back.jpg","3) Returning (Series 2, 3, and 4)/Sobersu's FIZZY FRENZY POP FIZZ_series3_back.jpg","3) Returning (Series 2, 3, and 4)/Sobersu's FULL BLAST JET-VAC_series3_back.jpg","3) Returning (Series 2, 3, and 4)/Sobersu's HOG WILD FRYNO_series2_back.jpg","3) Returning (Series 2, 3, and 4)/Sobersu's SURE SHOT SHROOMBOOM_series2_back.jpg","3) Returning (Series 2, 3, and 4)/Sobersu's TIDAL WAVE GILL GRUNT_series4_back.jpg","4) Minis/1) From Sypro's Adventure/Sobersu's GILL RUNT_mini_back.jpg","4) Minis/1) From Sypro's Adventure/Sobersu's TERRABITE_mini_back.jpg","4) Minis/1) From Sypro's Adventure/Sobersu's TRIGGER SNAPPY_mini_back.jpg","4) Minis/1) From Sypro's Adventure/Sobersu's WHISPER ELF_mini_back.jpg","4) Minis/2) From Giants/Sobersu's BARKLEY_mini_back.jpg","4) Minis/2) From Giants/Sobersu's EYE SMALL_mini_back.jpg","4) Minis/2) From Giants/Sobersu's MINI JINI_mini_back.jpg","4) Minis/2) From Giants/Sobersu's THUMPLING_mini_back.jpg","4) Minis/3) New/Sobersu's BOP_mini_back.jpg","4) Minis/3) New/Sobersu's BREEZE_mini_back.jpg","4) Minis/3) New/Sobersu's DROBIT_mini_back.jpg","4) Minis/3) New/Sobersu's HIJINX_mini_back.jpg","4) Minis/3) New/Sobersu's PET VAC_mini_back.jpg","4) Minis/3) New/Sobersu's SMALL FRY_mini_back.jpg","4) Minis/3) New/Sobersu's SPRY_mini_back.jpg","4) Minis/3) New/Sobersu's WEERUPTOR_mini_back.jpg","5) Magic Items/1) Expansion Packs/Sobersu's MIDNIGHT MUSEUM_back.jpg","5) Magic Items/1) Expansion Packs/Sobersu's SUNSCRAPER SPIRE_back.jpg","5) Magic Items/2) Adventure Packs/Sobersu's MIRROR OF MYSTERY_back.jpg","5) Magic Items/2) Adventure Packs/Sobersu's NIGHTMARE EXPRESS_back.jpg","5) Magic Items/2) Magic Items/Sobersu's HAND OF FATE_back.jpg","5) Magic Items/2) Magic Items/Sobersu's LEGENDARY HAND OF FATE_back.jpg","5) Magic Items/2) Magic Items/Sobersu's PIGGY BANK_back.jpg","5) Magic Items/2) Magic Items/Sobersu's ROCKET RAM_back.jpg","5) Magic Items/2) Magic Items/Sobersu's TIKI SPEAKY_back.jpg","6) In-Game Variants/1) In-Game Variants/Sobersu's DARK FOOD FIGHT_back.jpg","6) In-Game Variants/1) In-Game Variants/Sobersu's DARK SNAP SHOT_back.jpg","6) In-Game Variants/1) In-Game Variants/Sobersu's DARK WILDFIRE_back.jpg","6) In-Game Variants/1) In-Game Variants/Sobersu's KING COBRA CADABRA_back.jpg","6) In-Game Variants/1) In-Game Variants/Sobersu's LOVE POTION POP FIZZ_series3_back.jpg","6) In-Game Variants/1) In-Game Variants/Sobersu's NITRO HEAD RUSH_back.jpg","6) In-Game Variants/1) In-Game Variants/Sobersu's NITRO KRYPT KING_back.jpg","6) In-Game Variants/1) In-Game Variants/Sobersu's WINTERFEST LOB-STAR_back.jpg","6) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY BLADES_back.jpg","6) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY BUSHWHACK_back.jpg","6) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY DEJA VU_back.jpg","6) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY JAWBREAKER_back.jpg","6) In-Game Variants/3) Minis/Sobersu's EGGSELLENT WEERUPTOR_mini_back.jpg","6) In-Game Variants/3) Minis/Sobersu's GNARLY BARKLEY_mini_back.jpg","6) In-Game Variants/3) Minis/Sobersu's POWER PUNCH PET VAC_mini_back.jpg","9) Traps/1) Crystal Traps/Air/Sobersu's air trap_COBRA_back.jpg","9) Traps/1) Crystal Traps/Air/Sobersu's air trap_HOURGLASS_back.jpg","9) Traps/1) Crystal Traps/Air/Sobersu's air trap_JUGHEAD_back.jpg","9) Traps/1) Crystal Traps/Air/Sobersu's air trap_SCREAMER_back.jpg","9) Traps/1) Crystal Traps/Air/Sobersu's air trap_SWORD_back.jpg","9) Traps/1) Crystal Traps/Air/Sobersu's air trap_TOUCAN_back.jpg","9) Traps/1) Crystal Traps/Dark/Sobersu's dark trap_HANDSTAND_back.jpg","9) Traps/1) Crystal Traps/Dark/Sobersu's dark trap_SPIDER_back.jpg","9) Traps/1) Crystal Traps/Dark/Sobersu's dark trap_SWORD_back.jpg","9) Traps/1) Crystal Traps/Earth/Sobersu's earth trap_HAMMER_back.jpg","9) Traps/1) Crystal Traps/Earth/Sobersu's earth trap_HANDSTAND_back.jpg","9) Traps/1) Crystal Traps/Earth/Sobersu's earth trap_HOURGLASS_back.jpg","9) Traps/1) Crystal Traps/Earth/Sobersu's earth trap_ORB_back.jpg","9) Traps/1) Crystal Traps/Earth/Sobersu's earth trap_TOTEM_back.jpg","9) Traps/1) Crystal Traps/Earth/Sobersu's earth trap_TOUCAN_back.jpg","9) Traps/1) Crystal Traps/Fire/Sobersu's fire trap_CAPTAINS HAT_back.jpg","9) Traps/1) Crystal Traps/Fire/Sobersu's fire trap_SCEPTER_back.jpg","9) Traps/1) Crystal Traps/Fire/Sobersu's fire trap_SCREAMER_back.jpg","9) Traps/1) Crystal Traps/Fire/Sobersu's fire trap_TORCH_back.jpg","9) Traps/1) Crystal Traps/Fire/Sobersu's fire trap_TOTEM_back.jpg","9) Traps/1) Crystal Traps/Fire/Sobersu's fire trap_YAWN_back.jpg","9) Traps/1) Crystal Traps/Kaos/Sobersu's kaos trap_KAOS_back.jpg","9) Traps/1) Crystal Traps/Life/Sobersu's life trap_COBRA_back.jpg","9) Traps/1) Crystal Traps/Life/Sobersu's life trap_HUMMER_back.jpg","9) Traps/1) Crystal Traps/Life/Sobersu's life trap_SWORD_back.jpg","9) Traps/1) Crystal Traps/Life/Sobersu's life trap_TORCH_back.jpg","9) Traps/1) Crystal Traps/Life/Sobersu's life trap_TOUCAN_back.jpg","9) Traps/1) Crystal Traps/Life/Sobersu's life trap_YAWN_back.jpg","9) Traps/1) Crystal Traps/Light/Sobersu's light trap_HAWK_back.jpg","9) Traps/1) Crystal Traps/Light/Sobersu's light trap_SHIP_back.jpg","9) Traps/1) Crystal Traps/Light/Sobersu's light trap_YAWN_back.jpg","9) Traps/1) Crystal Traps/Magic/Sobersu's magic trap_AXE_back.jpg","9) Traps/1) Crystal Traps/Magic/Sobersu's magic trap_HOURGLASS_back.jpg","9) Traps/1) Crystal Traps/Magic/Sobersu's magic trap_LOG HOLDER_back.jpg","9) Traps/1) Crystal Traps/Magic/Sobersu's magic trap_SHIP_back.jpg","9) Traps/1) Crystal Traps/Magic/Sobersu's magic trap_SKULL_back.jpg","9) Traps/1) Crystal Traps/Magic/Sobersu's magic trap_TOTEM_back.jpg","9) Traps/1) Crystal Traps/Tech/Sobersu's tech trap_ANGEL_back.jpg","9) Traps/1) Crystal Traps/Tech/Sobersu's tech trap_HANDSTAND_back.jpg","9) Traps/1) Crystal Traps/Tech/Sobersu's tech trap_HAND_back.jpg","9) Traps/1) Crystal Traps/Tech/Sobersu's tech trap_HELMET_back.jpg","9) Traps/1) Crystal Traps/Tech/Sobersu's tech trap_TORCH_back.jpg","9) Traps/1) Crystal Traps/Tech/Sobersu's tech trap_TOTEM_back.jpg","9) Traps/1) Crystal Traps/Undead/Sobersu's undead trap_AXE_back.jpg","9) Traps/1) Crystal Traps/Undead/Sobersu's undead trap_CAPTAINS HAT_back.jpg","9) Traps/1) Crystal Traps/Undead/Sobersu's undead trap_COBRA_back.jpg","9) Traps/1) Crystal Traps/Undead/Sobersu's undead trap_HAND_back.jpg","9) Traps/1) Crystal Traps/Undead/Sobersu's undead trap_ORB_back.jpg","9) Traps/1) Crystal Traps/Undead/Sobersu's undead trap_SKULL_back.jpg","9) Traps/1) Crystal Traps/Water/Sobersu's water trap_ANGEL_back.jpg","9) Traps/1) Crystal Traps/Water/Sobersu's water trap_AXE_back.jpg","9) Traps/1) Crystal Traps/Water/Sobersu's water trap_HELMET_back.jpg","9) Traps/1) Crystal Traps/Water/Sobersu's water trap_JUGHEAD_back.jpg","9) Traps/1) Crystal Traps/Water/Sobersu's water trap_TOTEM_back.jpg","9) Traps/1) Crystal Traps/Water/Sobersu's water trap_WET WALTER_back.jpg","9) Traps/2) Crystal Trap Variants/Sobersu's earth trap_EASTER BUNNY_back.jpg","9) Traps/2) Crystal Trap Variants/Sobersu's kaos trap_KAOS LEGENDARY_back.jpg","9) Traps/2) Crystal Trap Variants/Sobersu's undead trap_ORB LEGENDARY_back.jpg","9) Traps/2) Crystal Trap Variants/Sobersu's undead trap_SKULL LEGENDARY_back.jpg","9) Traps/2) Crystal Trap Variants/Sobersu's water trap_JUGHEAD LEGENDARY_back.jpg"];
+
+
+    function init_scale(width, dpi)
+    {
+	var canvas = document.getElementById("scale_1px");
+	var font_height = 8;
+	var c_height = 30;
+	var s_height = c_height / 2 - 1;
+
+	c_width = width / mm_in * dpi;
+	mm_width = width;
+
+	canvas.width = parseInt(c_width);
+	canvas.height = 1;
+
+	canvas = document.getElementById("scale");
+
+	canvas.width = parseInt(c_width);
+	canvas.height = c_height;
+
+	const ctx = canvas.getContext("2d");
+	
+	ctx.font = font_height + "px serif";
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - 2, 0);
+	ctx.lineTo(canvas.width - 2, c_height);
+	ctx.stroke();
+	
+	for ( i = 0 ; i < width ; i++ )
+	{
+	    pos = i / width * c_width + 1;
+
+	    if ( i % 10 == 0 )
+	    {
+		ctx.fillText( i + " mm", pos + 4, c_height - s_height + font_height );
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		ctx.lineWidth = 1;
+		h = s_height / 2;
+	    }
+
+	    ctx.beginPath();
+	    ctx.moveTo(pos, c_height);
+	    ctx.lineTo(pos, c_height - h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in * 16; i++ )
+	{
+	    pos = i * mm_in / 16 / width * c_width + 1;
+	    h = 10;
+	    if ( i % 16 == 0 )
+	    {
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		if ( i % 8 == 0 )
+		{
+		    h = s_height * 3 / 4;
+		    ctx.lineWidth = 2;
+		}
+		else
+		{
+		    if ( i % 2 == 0 )
+			h = s_height * 3 / 5;
+		    else
+			h = s_height * 3 / 6;
+		}
+		ctx.lineWidth = 1;
+	    }
+	    ctx.beginPath();
+	    ctx.moveTo(pos, 0);
+	    ctx.lineTo(pos, h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in  ; i++ )
+	{
+	    pos = i * mm_in / width * c_width;
+	    ctx.fillText( i + " in", pos + 4, s_height);
+	}
+    }
+
+    function hide(id)
+    {
+	document.getElementById(id).style.display = "none";
+    }
+
+    function generate()
+    {
+	document.getElementById("scale").style.display = "inline";
+	document.getElementById("scale_1px").style.display = "inline";
+	document.getElementById("images").style.display = "inline";
+	init_scale(document.getElementById("sizeA").value, dpi);
+	hide("start_form");
+
+	card_size = document.getElementById("cardSize").value;
+
+	var cs = parseInt(card_size / mm_width * c_width);
+	var ch = parseInt(cs * 3.375 / 2.125 );
+	cs++;
+	ch++;
+
+	imgs = document.getElementById("images");
+	for (let i=0; i < cards.length; i++)
+	{
+	    var img = document.createElement('img');
+            img.src = cards[i];
+
+	    img.style.height = ch + "px";
+	    img.style.width = cs + "px";
+	    img.id = 'im' + i;
+	    img.onclick = function(){hide('im' + i);}
+	    img.style.paddingRight = '4px';
+
+            imgs.appendChild(img);
+	}
+
+    }
+
+</script>
+</html>

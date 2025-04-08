@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+ <body>
+    <canvas id='scale_1px' style='display:none;'></canvas>
+    <canvas id='scale' style='display:none;' onClick='hide("scale")'></canvas>
+    <div id='start_form'>
+	<form>
+	    <div>Size A in millimetres: <input id='sizeA' type=text value=190></div>
+	    <div>Card width in millimetres: <input id='cardSize' type=text value=54></div>
+	    <input type=button value=Generate onClick='generate()'>
+	    <br><br>
+	</form>
+    <div>Example for A4, the size A is different for each printer model.</div>
+    <img src="../../../../images/sample.jpg">
+    </div>
+    <div id=images style='display:none;' >
+	<div id=info style='text-align: center;'><input type=button onClick='hide("info")' value="click on image to dissapears..."></div>
+    </div>
+ </body>
+<script>
+
+    var dpi = 300;
+    var mm_in = 25.4;
+    var c_width;
+    var mm_width;
+
+	const cards = ["1) Swappers/Mr Shadow's Blast Zone Bottom.jpg","1) Swappers/Mr Shadow's Blast Zone Top.jpg","1) Swappers/Mr Shadow's Boom Jet Bottom.jpg","1) Swappers/Mr Shadow's Boom Jet Top.jpg","1) Swappers/Mr Shadow's Doom Stone Bottom.jpg","1) Swappers/Mr Shadow's Doom Stone Top.jpg","1) Swappers/Mr Shadow's Fire Kraken Bottom.jpg","1) Swappers/Mr Shadow's Fire Kraken Top.jpg","1) Swappers/Mr Shadow's Free Ranger Bottom.jpg","1) Swappers/Mr Shadow's Free Ranger Top.jpg","1) Swappers/Mr Shadow's Freeze Blade Bottom.jpg","1) Swappers/Mr Shadow's Freeze Blade Top.jpg","1) Swappers/Mr Shadow's Grilla Drilla Bottom.jpg","1) Swappers/Mr Shadow's Grilla Drilla Top.jpg","1) Swappers/Mr Shadow's Hoot Loop Bottom.jpg","1) Swappers/Mr Shadow's Hoot Loop Top.jpg","1) Swappers/Mr Shadow's Magna Charge Bottom.jpg","1) Swappers/Mr Shadow's Magna Charge Top.jpg","1) Swappers/Mr Shadow's Night Shift Bottom.jpg","1) Swappers/Mr Shadow's Night Shift Top.jpg","1) Swappers/Mr Shadow's Rattle Shake Bottom.jpg","1) Swappers/Mr Shadow's Rattle Shake Top.jpg","1) Swappers/Mr Shadow's Rubble Rouser Bottom.jpg","1) Swappers/Mr Shadow's Rubble Rouser Top.jpg","1) Swappers/Mr Shadow's Spy Rise Bottom.jpg","1) Swappers/Mr Shadow's Spy Rise Top.jpg","1) Swappers/Mr Shadow's Stink Bomb Bottom.jpg","1) Swappers/Mr Shadow's Stink Bomb Top.jpg","1) Swappers/Mr Shadow's Trap Shadow Bottom.jpg","1) Swappers/Mr Shadow's Trap Shadow Top.jpg","1) Swappers/Mr Shadow's Wash Buckler Bottom.jpg","1) Swappers/Mr Shadow's Wash Buckler Top.jpg","2) New (Series 1)/Mr Shadow's Bumble Blast.jpg","2) New (Series 1)/Mr Shadow's Countdown.jpg","2) New (Series 1)/Mr Shadow's Dune Bug.jpg","2) New (Series 1)/Mr Shadow's Fryno.jpg","2) New (Series 1)/Mr Shadow's Grim Creeper.jpg","2) New (Series 1)/Mr Shadow's Pop Thorn.jpg","2) New (Series 1)/Mr Shadow's Punk Shock.jpg","2) New (Series 1)/Mr Shadow's Rip Tide.jpg","2) New (Series 1)/Mr Shadow's Roller Brawl.jpg","2) New (Series 1)/Mr Shadow's Scorp.jpg","2) New (Series 1)/Mr Shadow's Scratch.jpg","2) New (Series 1)/Mr Shadow's Slobber Tooth.jpg","2) New (Series 1)/Mr Shadow's Smolderdash.jpg","2) New (Series 1)/Mr Shadow's Star Strike.jpg","2) New (Series 1)/Mr Shadow's Wind Up.jpg","2) New (Series 1)/Mr Shadow's Zoo Lou.jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Anchors Away Gill Grunt (Series 3).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Big Bang Trigger Happy (Series 3).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Blizzard Chill (Series 2).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Fire Bone Hot Dog (Series 2).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Heavy Duty Sprocket (Series 2).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Horn Blast Whirlwind (Series 3).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Hyper Beam Prism Break (Series 3).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Knockout Terrafin (Series 3).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Lava Barf Eruptor (Series 3).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Mega Ram Spyro (Series 3).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Ninja Stealth Elf (Series 3).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Phantom Cynder (Series 3).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Super Gulp Pop Fizz (Series 2).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Thorn Horn Camo (Series 2).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Turbo Jet-Vac (Series 2).jpg","3) Returning (Series 2 and Series 3)/Mr Shadow's Twin Blade Chop Chop (Series 3).jpg","4) LightCores/Mr Shadow's Bumble Blast LightCore.jpg","4) LightCores/Mr Shadow's Countdown LightCore.jpg","4) LightCores/Mr Shadow's Flashwing LightCore.jpg","4) LightCores/Mr Shadow's Grim Creeper LightCore.jpg","4) LightCores/Mr Shadow's Smolderdash LightCore.jpg","4) LightCores/Mr Shadow's Star Strike LightCore.jpg","4) LightCores/Mr Shadow's Warnado LightCore.jpg","4) LightCores/Mr Shadow's Wham-Shell LightCore.jpg","5) Magic Items/1) Adventure Packs/Mr Shadow's Sheep Wreck Island.jpg","5) Magic Items/1) Adventure Packs/Mr Shadow's Tower Of Time.jpg","5) Magic Items/2) Promotional Items/Mr Shadow's UFO Hat.jpg","5) Magic Items/3) Magic Items/Mr Shadow's Arkeyan Crossbow.jpg","5) Magic Items/3) Magic Items/Mr Shadow's Battle Hammer.jpg","5) Magic Items/3) Magic Items/Mr Shadow's Fiery Forge.jpg","5) Magic Items/3) Magic Items/Mr Shadow's Groove Machine.jpg","5) Magic Items/3) Magic Items/Mr Shadow's Platinum Sheep.jpg","5) Magic Items/3) Magic Items/Mr Shadow's Sky Diamond.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Dark Blast Zone Bottom.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Dark Blast Zone Top.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Dark Wash Buckler Bottom.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Dark Wash Buckler Top.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Enchanted Hoot Loop Bottom.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Enchanted Hoot Loop Top.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Jade Fire Kraken Bottom.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Jade Fire Kraken Top.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Nitro Freeze Blade Bottom.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Nitro Freeze Blade Top.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Nitro Magna Charge Bottom.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Nitro Magna Charge Top.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Quick Draw Rattle Shake Bottom.jpg","6) In-Game Variants/1) Swappers/Mr Shadow's Quick Draw Rattle Shake Top.jpg","6) In-Game Variants/2) In-Game Variants/Mr Shadow's Dark Slobber Tooth.jpg","6) In-Game Variants/2) In-Game Variants/Mr Shadow's Dark Stealth Elf.jpg","6) In-Game Variants/2) In-Game Variants/Mr Shadow's Enchanted LightCore Star Strike.jpg","6) In-Game Variants/2) In-Game Variants/Mr Shadow's Jolly Bumble Blast.jpg","6) In-Game Variants/2) In-Game Variants/Mr Shadow's Kickoff Countdown.jpg","6) In-Game Variants/2) In-Game Variants/Mr Shadow's Mega Ram Dark Spyro.jpg","6) In-Game Variants/2) In-Game Variants/Mr Shadow's Springtime Trigger Happy.jpg","6) In-Game Variants/2) In-Game Variants/Mr Shadow's Volcanic Eruptor.jpg","6) In-Game Variants/3) Legendaries/Mr Shadow's Legendary Free Ranger Bottom.jpg","6) In-Game Variants/3) Legendaries/Mr Shadow's Legendary Free Ranger Top.jpg","6) In-Game Variants/3) Legendaries/Mr Shadow's Legendary LightCore Grim Creeper.jpg","6) In-Game Variants/3) Legendaries/Mr Shadow's Legendary Night Shift Bottom.jpg","6) In-Game Variants/3) Legendaries/Mr Shadow's Legendary Night Shift Top.jpg","6) In-Game Variants/3) Legendaries/Mr Shadow's Legendary Zoo Lou.jpg","7) Unreleased/Mr Shadow's VVind-Up.jpg"];
+
+
+    function init_scale(width, dpi)
+    {
+	var canvas = document.getElementById("scale_1px");
+	var font_height = 8;
+	var c_height = 30;
+	var s_height = c_height / 2 - 1;
+
+	c_width = width / mm_in * dpi;
+	mm_width = width;
+
+	canvas.width = parseInt(c_width);
+	canvas.height = 1;
+
+	canvas = document.getElementById("scale");
+
+	canvas.width = parseInt(c_width);
+	canvas.height = c_height;
+
+	const ctx = canvas.getContext("2d");
+	
+	ctx.font = font_height + "px serif";
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - 2, 0);
+	ctx.lineTo(canvas.width - 2, c_height);
+	ctx.stroke();
+	
+	for ( i = 0 ; i < width ; i++ )
+	{
+	    pos = i / width * c_width + 1;
+
+	    if ( i % 10 == 0 )
+	    {
+		ctx.fillText( i + " mm", pos + 4, c_height - s_height + font_height );
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		ctx.lineWidth = 1;
+		h = s_height / 2;
+	    }
+
+	    ctx.beginPath();
+	    ctx.moveTo(pos, c_height);
+	    ctx.lineTo(pos, c_height - h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in * 16; i++ )
+	{
+	    pos = i * mm_in / 16 / width * c_width + 1;
+	    h = 10;
+	    if ( i % 16 == 0 )
+	    {
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		if ( i % 8 == 0 )
+		{
+		    h = s_height * 3 / 4;
+		    ctx.lineWidth = 2;
+		}
+		else
+		{
+		    if ( i % 2 == 0 )
+			h = s_height * 3 / 5;
+		    else
+			h = s_height * 3 / 6;
+		}
+		ctx.lineWidth = 1;
+	    }
+	    ctx.beginPath();
+	    ctx.moveTo(pos, 0);
+	    ctx.lineTo(pos, h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in  ; i++ )
+	{
+	    pos = i * mm_in / width * c_width;
+	    ctx.fillText( i + " in", pos + 4, s_height);
+	}
+    }
+
+    function hide(id)
+    {
+	document.getElementById(id).style.display = "none";
+    }
+
+    function generate()
+    {
+	document.getElementById("scale").style.display = "inline";
+	document.getElementById("scale_1px").style.display = "inline";
+	document.getElementById("images").style.display = "inline";
+	init_scale(document.getElementById("sizeA").value, dpi);
+	hide("start_form");
+
+	card_size = document.getElementById("cardSize").value;
+
+	var cs = parseInt(card_size / mm_width * c_width);
+	var ch = parseInt(cs * 3.375 / 2.125 );
+	cs++;
+	ch++;
+
+	imgs = document.getElementById("images");
+	for (let i=0; i < cards.length; i++)
+	{
+	    var img = document.createElement('img');
+            img.src = cards[i];
+
+	    img.style.height = ch + "px";
+	    img.style.width = cs + "px";
+	    img.id = 'im' + i;
+	    img.onclick = function(){hide('im' + i);}
+	    img.style.paddingRight = '4px';
+
+            imgs.appendChild(img);
+	}
+
+    }
+
+</script>
+</html>

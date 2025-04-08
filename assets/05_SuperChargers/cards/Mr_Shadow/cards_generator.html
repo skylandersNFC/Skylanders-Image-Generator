@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+ <body>
+    <canvas id='scale_1px' style='display:none;'></canvas>
+    <canvas id='scale' style='display:none;' onClick='hide("scale")'></canvas>
+    <div id='start_form'>
+	<form>
+	    <div>Size A in millimetres: <input id='sizeA' type=text value=190></div>
+	    <div>Card width in millimetres: <input id='cardSize' type=text value=54></div>
+	    <input type=button value=Generate onClick='generate()'>
+	    <br><br>
+	</form>
+    <div>Example for A4, the size A is different for each printer model.</div>
+    <img src="../../../../images/sample.jpg">
+    </div>
+    <div id=images style='display:none;' >
+	<div id=info style='text-align: center;'><input type=button onClick='hide("info")' value="click on image to dissapears..."></div>
+    </div>
+ </body>
+<script>
+
+    var dpi = 300;
+    var mm_in = 25.4;
+    var c_width;
+    var mm_width;
+
+	const cards = ["1) SuperChargers/Mr Shadow's Astroblast.jpg","1) SuperChargers/Mr Shadow's Big Bubble Pop Fizz.jpg","1) SuperChargers/Mr Shadow's Bone Bash Roller Brawl.jpg","1) SuperChargers/Mr Shadow's Deep Dive Gill Grunt.jpg","1) SuperChargers/Mr Shadow's Dive-Clops.jpg","1) SuperChargers/Mr Shadow's Double Dare Trigger Happy.jpg","1) SuperChargers/Mr Shadow's Fiesta.jpg","1) SuperChargers/Mr Shadow's Hammer Slam Bowser.jpg","1) SuperChargers/Mr Shadow's High Volt.jpg","1) SuperChargers/Mr Shadow's Hurricane Jet-Vac.jpg","1) SuperChargers/Mr Shadow's Lava Lance Eruptor.jpg","1) SuperChargers/Mr Shadow's Nightfall.jpg","1) SuperChargers/Mr Shadow's Shark Shooter Terrafin.jpg","1) SuperChargers/Mr Shadow's Smash Hit.jpg","1) SuperChargers/Mr Shadow's Spitfire.jpg","1) SuperChargers/Mr Shadow's Splat.jpg","1) SuperChargers/Mr Shadow's Stormblade.jpg","1) SuperChargers/Mr Shadow's Super Shot Stealth Elf.jpg","1) SuperChargers/Mr Shadow's Thrillipede.jpg","1) SuperChargers/Mr Shadow's Turbo Charge Donkey Kong.jpg","2) Vehicles/Air Vehicles/Mr Shadow's Buzz Wing.jpg","2) Vehicles/Air Vehicles/Mr Shadow's Clown Cruiser.jpg","2) Vehicles/Air Vehicles/Mr Shadow's Jet Stream.jpg","2) Vehicles/Air Vehicles/Mr Shadow's Sky Slicer.jpg","2) Vehicles/Air Vehicles/Mr Shadow's Stealth Stinger.jpg","2) Vehicles/Air Vehicles/Mr Shadow's Sun Runner.jpg","2) Vehicles/Land Vehicles/Mr Shadow's Barrel Blaster.jpg","2) Vehicles/Land Vehicles/Mr Shadow's Burn-Cycle.jpg","2) Vehicles/Land Vehicles/Mr Shadow's Crypt Crusher.jpg","2) Vehicles/Land Vehicles/Mr Shadow's Gold Rusher.jpg","2) Vehicles/Land Vehicles/Mr Shadow's Hot Streak.jpg","2) Vehicles/Land Vehicles/Mr Shadow's Shark Tank.jpg","2) Vehicles/Land Vehicles/Mr Shadow's Shield Striker.jpg","2) Vehicles/Land Vehicles/Mr Shadow's Thump Truck.jpg","2) Vehicles/Land Vehicles/Mr Shadow's Tomb Buggy.jpg","2) Vehicles/Sea Vehicles/Mr Shadow's Dive Bomber.jpg","2) Vehicles/Sea Vehicles/Mr Shadow's Reef Ripper.jpg","2) Vehicles/Sea Vehicles/Mr Shadow's Sea Shadow.jpg","2) Vehicles/Sea Vehicles/Mr Shadow's Soda Skimmer.jpg","2) Vehicles/Sea Vehicles/Mr Shadow's Splatter Splasher.jpg","3) Magic Items/Mr Shadow's Kaos Trophy.jpg","3) Magic Items/Mr Shadow's Land Trophy.jpg","3) Magic Items/Mr Shadow's Sea Trophy.jpg","3) Magic Items/Mr Shadow's Sky Trophy.jpg","4) Eon's Elite/Mr Shadow's Eon's Elite Ghost Roaster.jpg","4) Eon's Elite/Mr Shadow's Eon's Elite Slam Bam.jpg","4) Eon's Elite/Mr Shadow's Eon's Elite Voodood.jpg","4) Eon's Elite/Mr Shadow's Eon's Elite Zook.jpg","4) Eon's Elite/Mr Shadow's Eon’s Elite Boomer.jpg","4) Eon's Elite/Mr Shadow's Eon’s Elite Dino-Rang.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Birthday Bash Big Bubble Pop Fizz.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Dark Hammer Slam Bowser.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Dark Spitfire.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Dark Super Shot Stealth Elf.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Dark Turbo Charge Donkey Kong.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Eggcited Thrillipede.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Frightful Fiesta.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Missile-Tow Dive-Clops.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Power Blue Double Dare Trigger Happy.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Power Blue Splat.jpg","5) In-Game Variant SuperChargers/1) In-Game Variants/Mr Shadow's Steel Plated Smash Hit.jpg","5) In-Game Variant SuperChargers/2) Legendaries/Mr Shadow's Legendary Astroblast.jpg","5) In-Game Variant SuperChargers/2) Legendaries/Mr Shadow's Legendary Bone Bash Roller Brawl.jpg","5) In-Game Variant SuperChargers/2) Legendaries/Mr Shadow's Legendary Hurricane Jet-Vac.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Air Vehicles/Mr Shadow's Dark Clown Cruiser.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Air Vehicles/Mr Shadow's Nitro Stealth Stinger.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/Mr Shadow's Dark Barrel Blaster.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/Mr Shadow's Dark Hot Streak.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/Mr Shadow's E3 Hot Streak.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/Mr Shadow's Golden Hot Streak.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Land Vehicles/Mr Shadow's Power Blue Gold Rusher.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Sea Vehicles/Mr Shadow's Dark Sea Shadow.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Sea Vehicles/Mr Shadow's Nitro Soda Skimmer.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Sea Vehicles/Mr Shadow's Power Blue Splatter Splasher.jpg","6) In-Game Variant Vehicles/1) In-Game Variants/Sea Vehicles/Mr Shadow's Spring Ahead Dive Bomber.jpg","6) In-Game Variant Vehicles/2) Legendaries/Mr Shadow's Legendary Sun Runner.jpg"];
+
+
+    function init_scale(width, dpi)
+    {
+	var canvas = document.getElementById("scale_1px");
+	var font_height = 8;
+	var c_height = 30;
+	var s_height = c_height / 2 - 1;
+
+	c_width = width / mm_in * dpi;
+	mm_width = width;
+
+	canvas.width = parseInt(c_width);
+	canvas.height = 1;
+
+	canvas = document.getElementById("scale");
+
+	canvas.width = parseInt(c_width);
+	canvas.height = c_height;
+
+	const ctx = canvas.getContext("2d");
+	
+	ctx.font = font_height + "px serif";
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - 2, 0);
+	ctx.lineTo(canvas.width - 2, c_height);
+	ctx.stroke();
+	
+	for ( i = 0 ; i < width ; i++ )
+	{
+	    pos = i / width * c_width + 1;
+
+	    if ( i % 10 == 0 )
+	    {
+		ctx.fillText( i + " mm", pos + 4, c_height - s_height + font_height );
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		ctx.lineWidth = 1;
+		h = s_height / 2;
+	    }
+
+	    ctx.beginPath();
+	    ctx.moveTo(pos, c_height);
+	    ctx.lineTo(pos, c_height - h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in * 16; i++ )
+	{
+	    pos = i * mm_in / 16 / width * c_width + 1;
+	    h = 10;
+	    if ( i % 16 == 0 )
+	    {
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		if ( i % 8 == 0 )
+		{
+		    h = s_height * 3 / 4;
+		    ctx.lineWidth = 2;
+		}
+		else
+		{
+		    if ( i % 2 == 0 )
+			h = s_height * 3 / 5;
+		    else
+			h = s_height * 3 / 6;
+		}
+		ctx.lineWidth = 1;
+	    }
+	    ctx.beginPath();
+	    ctx.moveTo(pos, 0);
+	    ctx.lineTo(pos, h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in  ; i++ )
+	{
+	    pos = i * mm_in / width * c_width;
+	    ctx.fillText( i + " in", pos + 4, s_height);
+	}
+    }
+
+    function hide(id)
+    {
+	document.getElementById(id).style.display = "none";
+    }
+
+    function generate()
+    {
+	document.getElementById("scale").style.display = "inline";
+	document.getElementById("scale_1px").style.display = "inline";
+	document.getElementById("images").style.display = "inline";
+	init_scale(document.getElementById("sizeA").value, dpi);
+	hide("start_form");
+
+	card_size = document.getElementById("cardSize").value;
+
+	var cs = parseInt(card_size / mm_width * c_width);
+	var ch = parseInt(cs * 3.375 / 2.125 );
+	cs++;
+	ch++;
+
+	imgs = document.getElementById("images");
+	for (let i=0; i < cards.length; i++)
+	{
+	    var img = document.createElement('img');
+            img.src = cards[i];
+
+	    img.style.height = ch + "px";
+	    img.style.width = cs + "px";
+	    img.id = 'im' + i;
+	    img.onclick = function(){hide('im' + i);}
+	    img.style.paddingRight = '4px';
+
+            imgs.appendChild(img);
+	}
+
+    }
+
+</script>
+</html>

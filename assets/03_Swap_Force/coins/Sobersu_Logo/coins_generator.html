@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+ <body>
+    <canvas id='scale_1px' style='display:none;'></canvas>
+    <canvas id='scale' style='display:none;' onClick='hide("scale")'></canvas>
+    <div id='start_form'>
+	<form>
+	    <div>Size A in millimetres: <input id='sizeA' type=text value=190></div>
+	    <div>Coin size in millimetres: <input id='coinSize' type=text value=26></div>
+	    <input type=button value=Generate onClick='generate()'>
+	    <br><br>
+	</form>
+    <div>Example for A4, the size A is different for each printer model.</div>
+    <img src="../../../../images/sample.jpg">
+    </div>
+    <div id=images style='display:none;' >
+	<div id=info style='text-align: center;'><input type=button onClick='hide("info")' value="click on image to dissapears..."></div>
+    </div>
+ </body>
+<script>
+
+    var dpi = 300;
+    var mm_in = 25.4;
+    var c_width;
+    var mm_width;
+
+	const coins = ["1) Swappers/Blast Zone/fruitsnack's blast zone bottom.png","1) Swappers/Blast Zone/fruitsnack's blast zone top.png","1) Swappers/Boom Jet/fruitsnack's boom jet bottom.png","1) Swappers/Boom Jet/fruitsnack's boom jet top.png","1) Swappers/Doom Stone/fruitsnack's doom stone bottom.png","1) Swappers/Doom Stone/fruitsnack's doom stone top.png","1) Swappers/Fire Kraken/fruitsnack's fire kraken bottom.png","1) Swappers/Fire Kraken/fruitsnack's fire kraken top.png","1) Swappers/Free Ranger/fruitsnack's free ranger bottom.png","1) Swappers/Free Ranger/fruitsnack's free ranger top.png","1) Swappers/Freeze Blade/fruitsnack's freeze blade bottom.png","1) Swappers/Freeze Blade/fruitsnack's freeze blade top.png","1) Swappers/Grilla Drilla/fruitsnack's grilla drilla bottom.png","1) Swappers/Grilla Drilla/fruitsnack's grilla drilla top.png","1) Swappers/Hoot Loop/fruitsnack's hoot loop bottom.png","1) Swappers/Hoot Loop/fruitsnack's hoot loop top.png","1) Swappers/Magna Charge/fruitsnack's magna charge bottom.png","1) Swappers/Magna Charge/fruitsnack's magna charge top.png","1) Swappers/Night Shift/fruitsnack's night shift bottom.png","1) Swappers/Night Shift/fruitsnack's night shift top.png","1) Swappers/Rattle Shake/fruitsnack's rattle shake bottom.png","1) Swappers/Rattle Shake/fruitsnack's rattle shake top.png","1) Swappers/Rubble Rouser/fruitsnack's rubble rouser bottom.png","1) Swappers/Rubble Rouser/fruitsnack's rubble rouser top.png","1) Swappers/Spy Rise/fruitsnack's spy rise bottom.png","1) Swappers/Spy Rise/fruitsnack's spy rise top.png","1) Swappers/Stink Bomb/fruitsnack's stink bomb bottom.png","1) Swappers/Stink Bomb/fruitsnack's stink bomb top.png","1) Swappers/Trap Shadow/fruitsnack's trap shadow bottom.png","1) Swappers/Trap Shadow/fruitsnack's trap shadow top.png","1) Swappers/Wash Buckler/fruitsnack's wash buckler bottom.png","1) Swappers/Wash Buckler/fruitsnack's wash buckler top.png","2) New (Series 1)/fruitsnack's bumble blast back.png","2) New (Series 1)/fruitsnack's countdown back.png","2) New (Series 1)/fruitsnack's dune bug back.png","2) New (Series 1)/fruitsnack's fryno back.png","2) New (Series 1)/fruitsnack's grim creeper back.png","2) New (Series 1)/fruitsnack's pop thorn back.png","2) New (Series 1)/fruitsnack's punk shock back.png","2) New (Series 1)/fruitsnack's rip tide back.png","2) New (Series 1)/fruitsnack's roller brawl back.png","2) New (Series 1)/fruitsnack's scorp back.png","2) New (Series 1)/fruitsnack's scratch back.png","2) New (Series 1)/fruitsnack's slobber tooth back.png","2) New (Series 1)/fruitsnack's smolderdash back.png","2) New (Series 1)/fruitsnack's star strike back.png","2) New (Series 1)/fruitsnack's wind up back.png","2) New (Series 1)/fruitsnack's zoo lou back.png","3) Returning (Series 2 and Series 3)/fruitsnack's anchors away gill grunt back.png","3) Returning (Series 2 and Series 3)/fruitsnack's big bang trigger happy back.png","3) Returning (Series 2 and Series 3)/fruitsnack's blizzard chill back.png","3) Returning (Series 2 and Series 3)/fruitsnack's fire bone hot dog back.png","3) Returning (Series 2 and Series 3)/fruitsnack's heavy duty sprocket back.png","3) Returning (Series 2 and Series 3)/fruitsnack's horn blast whirlwind back.png","3) Returning (Series 2 and Series 3)/fruitsnack's hyper beam prism break back.png","3) Returning (Series 2 and Series 3)/fruitsnack's knockout terrafin back.png","3) Returning (Series 2 and Series 3)/fruitsnack's lava barf eruptor back.png","3) Returning (Series 2 and Series 3)/fruitsnack's mega ram spyro back.png","3) Returning (Series 2 and Series 3)/fruitsnack's ninja stealth elf back.png","3) Returning (Series 2 and Series 3)/fruitsnack's phantom cynder back.png","3) Returning (Series 2 and Series 3)/fruitsnack's sugar gulp pop fizz back.png","3) Returning (Series 2 and Series 3)/fruitsnack's thorn horn camo back.png","3) Returning (Series 2 and Series 3)/fruitsnack's turbo jet-vac back.png","3) Returning (Series 2 and Series 3)/fruitsnack's twin blade chop chop back.png","4) LightCores/fruitsnack's lightcore bumble blast back.png","4) LightCores/fruitsnack's lightcore countdown back.png","4) LightCores/fruitsnack's lightcore flashwing back.png","4) LightCores/fruitsnack's lightcore grim creeper back.png","4) LightCores/fruitsnack's lightcore smolderdash back.png","4) LightCores/fruitsnack's lightcore star strike back.png","4) LightCores/fruitsnack's lightcore warnado back.png","4) LightCores/fruitsnack's lightcore wham-shell back.png","5) Magic Items/1) Adventure Packs/fruitsnack's sheep wreck island back.png","5) Magic Items/1) Adventure Packs/fruitsnack's tower of time back.png","5) Magic Items/2) Promotional Items/fruitsnack's ufo hat back.png","5) Magic Items/3) Magic Items/fruitsnack's arkeyan crossbow back.png","5) Magic Items/3) Magic Items/fruitsnack's battle hammer back.png","5) Magic Items/3) Magic Items/fruitsnack's fiery forge back.png","5) Magic Items/3) Magic Items/fruitsnack's groove machine back.png","5) Magic Items/3) Magic Items/fruitsnack's platinum sheep back.png","5) Magic Items/3) Magic Items/fruitsnack's sky diamond back.png","6) In-Game Variants/1) Swappers/Dark Blast Zone/fruitsnack's dark blast zone bottom.png","6) In-Game Variants/1) Swappers/Dark Blast Zone/fruitsnack's dark blast zone top.png","6) In-Game Variants/1) Swappers/Dark Wash Buckler/fruitsnack's dark wash buckler bottom.png","6) In-Game Variants/1) Swappers/Dark Wash Buckler/fruitsnack's dark wash buckler top.png","6) In-Game Variants/1) Swappers/Enchanted Hoot Loop/fruitsnack's enchanted hoot loop bottom.png","6) In-Game Variants/1) Swappers/Enchanted Hoot Loop/fruitsnack's enchanted hoot loop top.png","6) In-Game Variants/1) Swappers/Jade Fire Kraken/fruitsnack's jade fire kraken bottom.png","6) In-Game Variants/1) Swappers/Jade Fire Kraken/fruitsnack's jade fire kraken top.png","6) In-Game Variants/1) Swappers/Nitro Freeze Blade/fruitsnack's nitro freeze blade bottom.png","6) In-Game Variants/1) Swappers/Nitro Freeze Blade/fruitsnack's nitro freeze blade top.png","6) In-Game Variants/1) Swappers/Nitro Magna Charge/fruitsnack's nitro magna charge bottom.png","6) In-Game Variants/1) Swappers/Nitro Magna Charge/fruitsnack's nitro magna charge top.png","6) In-Game Variants/1) Swappers/Quick Draw Rattle Shake/fruitsnack's quickdraw rattle shake bottom.png","6) In-Game Variants/1) Swappers/Quick Draw Rattle Shake/fruitsnack's quickdraw rattle shake top.png","6) In-Game Variants/2) In-Game Variants/fruitsnack's dark mega ram spyro back.png","6) In-Game Variants/2) In-Game Variants/fruitsnack's dark slobber tooth back.png","6) In-Game Variants/2) In-Game Variants/fruitsnack's dark stealth elf back.png","6) In-Game Variants/2) In-Game Variants/fruitsnack's enchanted star strike back.png","6) In-Game Variants/2) In-Game Variants/fruitsnack's jolly bumble blast back.png","6) In-Game Variants/2) In-Game Variants/fruitsnack's kickoff countdown back.png","6) In-Game Variants/2) In-Game Variants/fruitsnack's springtime trigger happy back.png","6) In-Game Variants/2) In-Game Variants/fruitsnack's volcanic eruptor back.png","6) In-Game Variants/3) Legendaries/fruitsnack's legendary grim creeper back.png","6) In-Game Variants/3) Legendaries/fruitsnack's legendary zoo lou back.png","6) In-Game Variants/3) Legendaries/Legendary Free Ranger/fruitsnack's legendary free ranger bottom.png","6) In-Game Variants/3) Legendaries/Legendary Free Ranger/fruitsnack's legendary free ranger top.png","6) In-Game Variants/3) Legendaries/Legendary Night Shift/fruitsnack's legendary night shift bottom.png","6) In-Game Variants/3) Legendaries/Legendary Night Shift/fruitsnack's legendary night shift top.png","8) Unreleased/fruitsnack's vvind-up back.png"];
+
+
+    function init_scale(width, dpi)
+    {
+	var canvas = document.getElementById("scale_1px");
+	var font_height = 8;
+	var c_height = 30;
+	var s_height = c_height / 2 - 1;
+
+	c_width = width / mm_in * dpi;
+	mm_width = width;
+
+	canvas.width = parseInt(c_width);
+	canvas.height = 1;
+
+	canvas = document.getElementById("scale");
+
+	canvas.width = parseInt(c_width);
+	canvas.height = c_height;
+
+	const ctx = canvas.getContext("2d");
+	
+	ctx.font = font_height + "px serif";
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - 2, 0);
+	ctx.lineTo(canvas.width - 2, c_height);
+	ctx.stroke();
+	
+	for ( i = 0 ; i < width ; i++ )
+	{
+	    pos = i / width * c_width + 1;
+
+	    if ( i % 10 == 0 )
+	    {
+		ctx.fillText( i + " mm", pos + 4, c_height - s_height + font_height );
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		ctx.lineWidth = 1;
+		h = s_height / 2;
+	    }
+
+	    ctx.beginPath();
+	    ctx.moveTo(pos, c_height);
+	    ctx.lineTo(pos, c_height - h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in * 16; i++ )
+	{
+	    pos = i * mm_in / 16 / width * c_width + 1;
+	    h = 10;
+	    if ( i % 16 == 0 )
+	    {
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		if ( i % 8 == 0 )
+		{
+		    h = s_height * 3 / 4;
+		    ctx.lineWidth = 2;
+		}
+		else
+		{
+		    if ( i % 2 == 0 )
+			h = s_height * 3 / 5;
+		    else
+			h = s_height * 3 / 6;
+		}
+		ctx.lineWidth = 1;
+	    }
+	    ctx.beginPath();
+	    ctx.moveTo(pos, 0);
+	    ctx.lineTo(pos, h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in  ; i++ )
+	{
+	    pos = i * mm_in / width * c_width;
+	    ctx.fillText( i + " in", pos + 4, s_height);
+	}
+    }
+
+    function hide(id)
+    {
+	document.getElementById(id).style.display = "none";
+    }
+
+    function generate()
+    {
+	document.getElementById("scale").style.display = "inline";
+	document.getElementById("scale_1px").style.display = "inline";
+	document.getElementById("images").style.display = "inline";
+	init_scale(document.getElementById("sizeA").value, dpi);
+	hide("start_form");
+
+	coin_size = document.getElementById("coinSize").value;
+
+	var cs = parseInt(coin_size / mm_width * c_width);
+
+	imgs = document.getElementById("images");
+	for (let i=0; i < coins.length; i++)
+	{
+	    var img = document.createElement('img');
+            img.src = coins[i];
+
+	    
+	    img.style.height = cs + "px";
+	    img.style.width = cs + "px";
+	    img.id = 'im' + i;
+	    img.onclick = function(){hide('im' + i);}
+	    img.style.paddingRight = '2px';
+
+            imgs.appendChild(img);
+	}
+
+    }
+
+</script>
+</html>

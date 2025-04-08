@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+ <body>
+    <canvas id='scale_1px' style='display:none;'></canvas>
+    <canvas id='scale' style='display:none;' onClick='hide("scale")'></canvas>
+    <div id='start_form'>
+	<form>
+	    <div>Size A in millimetres: <input id='sizeA' type=text value=190></div>
+	    <div>Coin size in millimetres: <input id='coinSize' type=text value=26></div>
+	    <input type=button value=Generate onClick='generate()'>
+	    <br><br>
+	</form>
+    <div>Example for A4, the size A is different for each printer model.</div>
+    <img src="../../../../images/sample.jpg">
+    </div>
+    <div id=images style='display:none;' >
+	<div id=info style='text-align: center;'><input type=button onClick='hide("info")' value="click on image to dissapears..."></div>
+    </div>
+ </body>
+<script>
+
+    var dpi = 300;
+    var mm_in = 25.4;
+    var c_width;
+    var mm_width;
+
+	const coins = ["1) Swappers/Blast Zone/Mirakel's blast-zone-bottom.png","1) Swappers/Blast Zone/Mirakel's blast-zone.png","1) Swappers/Boom Jet/Mirakel's boom-jet-bottom.png","1) Swappers/Boom Jet/Mirakel's boom-jet.png","1) Swappers/Doom Stone/Mirakel's doom-stone-bottom.png","1) Swappers/Doom Stone/Mirakel's doom-stone.png","1) Swappers/Fire Kraken/Mirakel's fire-kraken-bottom.png","1) Swappers/Fire Kraken/Mirakel's fire-kraken.png","1) Swappers/Free Ranger/Mirakel's free-ranger-bottom.png","1) Swappers/Free Ranger/Mirakel's free-ranger.png","1) Swappers/Freeze Blade/Mirakel's freeze-blade-bottom.png","1) Swappers/Freeze Blade/Mirakel's freeze-blade.png","1) Swappers/Grilla Drilla/Mirakel's grilla-drilla-bottom.png","1) Swappers/Grilla Drilla/Mirakel's grilla-drilla.png","1) Swappers/Hoot Loop/Mirakel's hoot-loop-bottom.png","1) Swappers/Hoot Loop/Mirakel's hoot-loop.png","1) Swappers/Magna Charge/Mirakel's magna-charge-bottom.png","1) Swappers/Magna Charge/Mirakel's magna-charge.png","1) Swappers/Night Shift/Mirakel's night-shift-bottom.png","1) Swappers/Night Shift/Mirakel's night-shift.png","1) Swappers/Rattle Shake/Mirakel's rattle-shake-bottom.png","1) Swappers/Rattle Shake/Mirakel's rattle-shake.png","1) Swappers/Rubble Rouser/Mirakel's rubble-rouser-bottom.png","1) Swappers/Rubble Rouser/Mirakel's rubble-rouser.png","1) Swappers/Spy Rise/Mirakel's spy-rise-bottom.png","1) Swappers/Spy Rise/Mirakel's spy-rise.png","1) Swappers/Stink Bomb/Mirakel's stink-bomb-bottom.png","1) Swappers/Stink Bomb/Mirakel's stink-bomb.png","1) Swappers/Trap Shadow/Mirakel's trap-shadow-bottom.png","1) Swappers/Trap Shadow/Mirakel's trap-shadow.png","1) Swappers/Wash Buckler/Mirakel's wash-buckler-bottom.png","1) Swappers/Wash Buckler/Mirakel's wash-buckler.png","2) New (Series 1)/Mirakel's bumble-blast.png","2) New (Series 1)/Mirakel's countdown.png","2) New (Series 1)/Mirakel's dune-bug.png","2) New (Series 1)/Mirakel's fryno.png","2) New (Series 1)/Mirakel's grim-creeper.png","2) New (Series 1)/Mirakel's pop-thorn.png","2) New (Series 1)/Mirakel's punk-shock.png","2) New (Series 1)/Mirakel's rip-tide.png","2) New (Series 1)/Mirakel's roller-brawl.png","2) New (Series 1)/Mirakel's scorp.png","2) New (Series 1)/Mirakel's scratch.png","2) New (Series 1)/Mirakel's slobber-tooth.png","2) New (Series 1)/Mirakel's smolderdash.png","2) New (Series 1)/Mirakel's star-strike.png","2) New (Series 1)/Mirakel's wind-up.png","2) New (Series 1)/Mirakel's zoo-lou.png","3) Returning (Series 2 and Series 3)/Mirakel's anchors-away-gill-grunt.png","3) Returning (Series 2 and Series 3)/Mirakel's big-bang-trigger-happy.png","3) Returning (Series 2 and Series 3)/Mirakel's blizzard-chill.png","3) Returning (Series 2 and Series 3)/Mirakel's heavy-duty-sprocket.png","3) Returning (Series 2 and Series 3)/Mirakel's horn-blast-whirlwind.png","3) Returning (Series 2 and Series 3)/Mirakel's hyper-beam-prism-break.png","3) Returning (Series 2 and Series 3)/Mirakel's knockout-terrafin.png","3) Returning (Series 2 and Series 3)/Mirakel's lava-barf-eruptor.png","3) Returning (Series 2 and Series 3)/Mirakel's mega-ram-spyro.png","3) Returning (Series 2 and Series 3)/Mirakel's ninja-stealth-elf.png","3) Returning (Series 2 and Series 3)/Mirakel's phantom-cynder.png","3) Returning (Series 2 and Series 3)/Mirakel's series-2-hot-dog.png","3) Returning (Series 2 and Series 3)/Mirakel's super-gulp-pop-fizz.png","3) Returning (Series 2 and Series 3)/Mirakel's thorn-horn-camo.png","3) Returning (Series 2 and Series 3)/Mirakel's turbo-jet-vac.png","3) Returning (Series 2 and Series 3)/Mirakel's twin-blade-chop-chop.png","4) LightCores/Mirakel's lightcore-bumble-blast.png","4) LightCores/Mirakel's lightcore-countdown.png","4) LightCores/Mirakel's lightcore-enchanted-star-strike.png","4) LightCores/Mirakel's lightcore-flashwing.png","4) LightCores/Mirakel's lightcore-grim-creeper.png","4) LightCores/Mirakel's lightcore-smolderdash.png","4) LightCores/Mirakel's lightcore-star-strike.png","4) LightCores/Mirakel's lightcore-warnado.png","4) LightCores/Mirakel's lightcore-wham-shell.png","6) In-Game Variants/1) Swappers/Dark Blast Zone/Mirakel's dark-blast-zone-bottom.png","6) In-Game Variants/1) Swappers/Dark Blast Zone/Mirakel's dark-blast-zone.png","6) In-Game Variants/1) Swappers/Dark Wash Buckler/Mirakel's dark-wash-buckler-bottom.png","6) In-Game Variants/1) Swappers/Dark Wash Buckler/Mirakel's dark-wash-buckler.png","6) In-Game Variants/1) Swappers/Enchanted Hoot Loop/Mirakel's enchanted-hoot-loop-bottom.png","6) In-Game Variants/1) Swappers/Enchanted Hoot Loop/Mirakel's enchanted-hoot-loop.png","6) In-Game Variants/1) Swappers/Jade Fire Kraken/Mirakel's jade-fire-kraken-bottom.png","6) In-Game Variants/1) Swappers/Jade Fire Kraken/Mirakel's jade-fire-kraken.png","6) In-Game Variants/1) Swappers/Nitro Freeze Blade/Mirakel's nitro-freeze-blade-bottom.png","6) In-Game Variants/1) Swappers/Nitro Freeze Blade/Mirakel's nitro-freeze-blade.png","6) In-Game Variants/1) Swappers/Nitro Magna Charge/Mirakel's nitro-magna-charge-bottom.png","6) In-Game Variants/1) Swappers/Nitro Magna Charge/Mirakel's nitro-magna-charge.png","6) In-Game Variants/1) Swappers/Quick Draw Rattle Shake/Mirakel's Quickdraw-Rattle-Shake-Bottom.png","6) In-Game Variants/1) Swappers/Quick Draw Rattle Shake/Mirakel's Quickdraw-Rattle-Shake-Top.png","6) In-Game Variants/2) In-Game Variants/Mirakel's dark-edition-spyro.png","6) In-Game Variants/2) In-Game Variants/Mirakel's dark-slobber-tooth.png","6) In-Game Variants/2) In-Game Variants/Mirakel's dark-stealth-elf.png","6) In-Game Variants/2) In-Game Variants/Mirakel's jolly-bumble-blast.png","6) In-Game Variants/2) In-Game Variants/Mirakel's kickoff-countdown.png","6) In-Game Variants/2) In-Game Variants/Mirakel's springtime-trigger-happy.png","6) In-Game Variants/2) In-Game Variants/Mirakel's volcanic-eruptor.png","6) In-Game Variants/3) Legendaries/Mirakel's legendary-grim-creeper.png","6) In-Game Variants/3) Legendaries/Legendary Free Ranger/Mirakel's legendary-free-ranger-bottom.png","6) In-Game Variants/3) Legendaries/Legendary Free Ranger/Mirakel's legendary-free-ranger.png","6) In-Game Variants/3) Legendaries/Legendary Night Shift/Mirakel's Legendary Night Shift Bottom.png","6) In-Game Variants/3) Legendaries/Legendary Night Shift/Mirakel's Legendary Night Shift Top.png","8) Unreleased/Mirakel's VVind Up.png"];
+
+
+    function init_scale(width, dpi)
+    {
+	var canvas = document.getElementById("scale_1px");
+	var font_height = 8;
+	var c_height = 30;
+	var s_height = c_height / 2 - 1;
+
+	c_width = width / mm_in * dpi;
+	mm_width = width;
+
+	canvas.width = parseInt(c_width);
+	canvas.height = 1;
+
+	canvas = document.getElementById("scale");
+
+	canvas.width = parseInt(c_width);
+	canvas.height = c_height;
+
+	const ctx = canvas.getContext("2d");
+	
+	ctx.font = font_height + "px serif";
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - 2, 0);
+	ctx.lineTo(canvas.width - 2, c_height);
+	ctx.stroke();
+	
+	for ( i = 0 ; i < width ; i++ )
+	{
+	    pos = i / width * c_width + 1;
+
+	    if ( i % 10 == 0 )
+	    {
+		ctx.fillText( i + " mm", pos + 4, c_height - s_height + font_height );
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		ctx.lineWidth = 1;
+		h = s_height / 2;
+	    }
+
+	    ctx.beginPath();
+	    ctx.moveTo(pos, c_height);
+	    ctx.lineTo(pos, c_height - h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in * 16; i++ )
+	{
+	    pos = i * mm_in / 16 / width * c_width + 1;
+	    h = 10;
+	    if ( i % 16 == 0 )
+	    {
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		if ( i % 8 == 0 )
+		{
+		    h = s_height * 3 / 4;
+		    ctx.lineWidth = 2;
+		}
+		else
+		{
+		    if ( i % 2 == 0 )
+			h = s_height * 3 / 5;
+		    else
+			h = s_height * 3 / 6;
+		}
+		ctx.lineWidth = 1;
+	    }
+	    ctx.beginPath();
+	    ctx.moveTo(pos, 0);
+	    ctx.lineTo(pos, h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in  ; i++ )
+	{
+	    pos = i * mm_in / width * c_width;
+	    ctx.fillText( i + " in", pos + 4, s_height);
+	}
+    }
+
+    function hide(id)
+    {
+	document.getElementById(id).style.display = "none";
+    }
+
+    function generate()
+    {
+	document.getElementById("scale").style.display = "inline";
+	document.getElementById("scale_1px").style.display = "inline";
+	document.getElementById("images").style.display = "inline";
+	init_scale(document.getElementById("sizeA").value, dpi);
+	hide("start_form");
+
+	coin_size = document.getElementById("coinSize").value;
+
+	var cs = parseInt(coin_size / mm_width * c_width);
+
+	imgs = document.getElementById("images");
+	for (let i=0; i < coins.length; i++)
+	{
+	    var img = document.createElement('img');
+            img.src = coins[i];
+
+	    
+	    img.style.height = cs + "px";
+	    img.style.width = cs + "px";
+	    img.id = 'im' + i;
+	    img.onclick = function(){hide('im' + i);}
+	    img.style.paddingRight = '2px';
+
+            imgs.appendChild(img);
+	}
+
+    }
+
+</script>
+</html>

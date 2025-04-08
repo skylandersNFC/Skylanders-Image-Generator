@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+ <body>
+    <canvas id='scale_1px' style='display:none;'></canvas>
+    <canvas id='scale' style='display:none;' onClick='hide("scale")'></canvas>
+    <div id='start_form'>
+	<form>
+	    <div>Size A in millimetres: <input id='sizeA' type=text value=190></div>
+	    <div>Coin size in millimetres: <input id='coinSize' type=text value=26></div>
+	    <input type=button value=Generate onClick='generate()'>
+	    <br><br>
+	</form>
+    <div>Example for A4, the size A is different for each printer model.</div>
+    <img src="../../../../images/sample.jpg">
+    </div>
+    <div id=images style='display:none;' >
+	<div id=info style='text-align: center;'><input type=button onClick='hide("info")' value="click on image to dissapears..."></div>
+    </div>
+ </body>
+<script>
+
+    var dpi = 300;
+    var mm_in = 25.4;
+    var c_width;
+    var mm_width;
+
+	const coins = ["1) Trap Masters/Mirakel's blastermind-logo.png","1) Trap Masters/Mirakel's bushwhack-logo.png","1) Trap Masters/Mirakel's enigma-logo.png","1) Trap Masters/Mirakel's gearshift-logo.png","1) Trap Masters/Mirakel's gusto-logo.png","1) Trap Masters/Mirakel's head-rush-logo.png","1) Trap Masters/Mirakel's jawbreaker-logo.png","1) Trap Masters/Mirakel's ka-boom-logo.png","1) Trap Masters/Mirakel's knight-light-logo.png","1) Trap Masters/Mirakel's knight-mare-logo.png","1) Trap Masters/Mirakel's krypt-king-logo.png","1) Trap Masters/Mirakel's lob-star-logo.png","1) Trap Masters/Mirakel's short-cut-logo.png","1) Trap Masters/Mirakel's snap-shot-logo.png","1) Trap Masters/Mirakel's thunderbolt-logo.png","1) Trap Masters/Mirakel's tuff-luck-logo.png","1) Trap Masters/Mirakel's wallop-logo.png","1) Trap Masters/Mirakel's wildfire-logo.png","2) New (Series 1)/Mirakel's bat-spin-logo.png","2) New (Series 1)/Mirakel's blackout-logo.png","2) New (Series 1)/Mirakel's blades-logo.png","2) New (Series 1)/Mirakel's chopper-logo.png","2) New (Series 1)/Mirakel's cobra-cadabra-logo.png","2) New (Series 1)/Mirakel's deja-vu-logo.png","2) New (Series 1)/Mirakel's echo-logo.png","2) New (Series 1)/Mirakel's fist-bump-logo.png","2) New (Series 1)/Mirakel's fling-kong-logo.png","2) New (Series 1)/Mirakel's flip-wreck-logo.png","2) New (Series 1)/Mirakel's food-fight-logo.png","2) New (Series 1)/Mirakel's funny-bone-logo.png","2) New (Series 1)/Mirakel's high-five-logo.png","2) New (Series 1)/Mirakel's rocky-roll-logo.png","2) New (Series 1)/Mirakel's spotlight-logo.png","2) New (Series 1)/Mirakel's torch-logo.png","2) New (Series 1)/Mirakel's trail-blazer-logo.png","2) New (Series 1)/Mirakel's tread-head-logo.png","3) Returning (Series 2, 3, and 4)/Mirakel's fizzy-frenzy-pop-fizz-logo.png","3) Returning (Series 2, 3, and 4)/Mirakel's full-blast-jet-vac-logo.png","3) Returning (Series 2, 3, and 4)/Mirakel's hog-wild-fryno-logo.png","3) Returning (Series 2, 3, and 4)/Mirakel's sure-shot-shroomboom-logo.png","3) Returning (Series 2, 3, and 4)/Mirakel's tidal-wave-gill-grunt-logo.png","5) Minis/1) From Sypro's Adventure/Mirakel's gill-runt-logo.png","5) Minis/1) From Sypro's Adventure/Mirakel's terrabite-logo.png","5) Minis/1) From Sypro's Adventure/Mirakel's trigger-snappy-logo.png","5) Minis/1) From Sypro's Adventure/Mirakel's whisper-elf-logo.png","5) Minis/2) From Giants/Mirakel's barkley-logo.png","5) Minis/2) From Giants/Mirakel's eye-small-logo.png","5) Minis/2) From Giants/Mirakel's mini-jini-logo.png","5) Minis/2) From Giants/Mirakel's thumpling-logo.png","5) Minis/3) New/Mirakel's bop-logo.png","5) Minis/3) New/Mirakel's breeze-logo.png","5) Minis/3) New/Mirakel's drobit-logo.png","5) Minis/3) New/Mirakel's hijinx-logo.png","5) Minis/3) New/Mirakel's pet-vac-logo.png","5) Minis/3) New/Mirakel's small-fry-logo.png","5) Minis/3) New/Mirakel's spry-logo.png","5) Minis/3) New/Mirakel's weeruptor-logo.png","8) In-Game Variants/1) In-Game Variants/Mirakel's dark-food-fight-logo.png","8) In-Game Variants/1) In-Game Variants/Mirakel's dark-snap-shot-logo.png","8) In-Game Variants/1) In-Game Variants/Mirakel's dark-wildfire-logo.png","8) In-Game Variants/1) In-Game Variants/Mirakel's love-potion-pop-fizz-logo.png","8) In-Game Variants/1) In-Game Variants/Mirakel's nitro-krypt-king-logo.png","8) In-Game Variants/1) In-Game Variants/Mirakel's winterfest-lob-star-logo.png","8) In-Game Variants/2) Legendaries/Mirakel's legendary-blades-logo.png","8) In-Game Variants/2) Legendaries/Mirakel's legendary-deja-vu-logo.png","8) In-Game Variants/2) Legendaries/Mirakel's legendary-jawbreaker-logo.png","8) In-Game Variants/3) Minis/Mirakel's eggsellent-weeruptor-logo.png","8) In-Game Variants/3) Minis/Mirakel's gnarly-barkley-logo.png","8) In-Game Variants/3) Minis/Mirakel's power-punch-pet-vac-logo.png"];
+
+
+    function init_scale(width, dpi)
+    {
+	var canvas = document.getElementById("scale_1px");
+	var font_height = 8;
+	var c_height = 30;
+	var s_height = c_height / 2 - 1;
+
+	c_width = width / mm_in * dpi;
+	mm_width = width;
+
+	canvas.width = parseInt(c_width);
+	canvas.height = 1;
+
+	canvas = document.getElementById("scale");
+
+	canvas.width = parseInt(c_width);
+	canvas.height = c_height;
+
+	const ctx = canvas.getContext("2d");
+	
+	ctx.font = font_height + "px serif";
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - 2, 0);
+	ctx.lineTo(canvas.width - 2, c_height);
+	ctx.stroke();
+	
+	for ( i = 0 ; i < width ; i++ )
+	{
+	    pos = i / width * c_width + 1;
+
+	    if ( i % 10 == 0 )
+	    {
+		ctx.fillText( i + " mm", pos + 4, c_height - s_height + font_height );
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		ctx.lineWidth = 1;
+		h = s_height / 2;
+	    }
+
+	    ctx.beginPath();
+	    ctx.moveTo(pos, c_height);
+	    ctx.lineTo(pos, c_height - h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in * 16; i++ )
+	{
+	    pos = i * mm_in / 16 / width * c_width + 1;
+	    h = 10;
+	    if ( i % 16 == 0 )
+	    {
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		if ( i % 8 == 0 )
+		{
+		    h = s_height * 3 / 4;
+		    ctx.lineWidth = 2;
+		}
+		else
+		{
+		    if ( i % 2 == 0 )
+			h = s_height * 3 / 5;
+		    else
+			h = s_height * 3 / 6;
+		}
+		ctx.lineWidth = 1;
+	    }
+	    ctx.beginPath();
+	    ctx.moveTo(pos, 0);
+	    ctx.lineTo(pos, h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in  ; i++ )
+	{
+	    pos = i * mm_in / width * c_width;
+	    ctx.fillText( i + " in", pos + 4, s_height);
+	}
+    }
+
+    function hide(id)
+    {
+	document.getElementById(id).style.display = "none";
+    }
+
+    function generate()
+    {
+	document.getElementById("scale").style.display = "inline";
+	document.getElementById("scale_1px").style.display = "inline";
+	document.getElementById("images").style.display = "inline";
+	init_scale(document.getElementById("sizeA").value, dpi);
+	hide("start_form");
+
+	coin_size = document.getElementById("coinSize").value;
+
+	var cs = parseInt(coin_size / mm_width * c_width);
+
+	imgs = document.getElementById("images");
+	for (let i=0; i < coins.length; i++)
+	{
+	    var img = document.createElement('img');
+            img.src = coins[i];
+
+	    
+	    img.style.height = cs + "px";
+	    img.style.width = cs + "px";
+	    img.id = 'im' + i;
+	    img.onclick = function(){hide('im' + i);}
+	    img.style.paddingRight = '2px';
+
+            imgs.appendChild(img);
+	}
+
+    }
+
+</script>
+</html>
