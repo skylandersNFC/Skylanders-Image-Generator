@@ -186,3 +186,22 @@ a {
 .imaginators:hover{
     opacity: 0.7;
 }
+
+.footer {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+}
+
+.footer-link {
+  color: #FFF;
+
+}
+
+.footer-link:hover {
+  color: #1888c8;
+  text-decoration: underline;
+}
