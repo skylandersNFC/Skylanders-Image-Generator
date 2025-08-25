@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+ <body>
+    <canvas id='scale_1px' style='display:none;'></canvas>
+    <canvas id='scale' style='display:none;' onClick='hide("scale")'></canvas>
+    <div id='start_form'>
+	<form>
+	    <div>Size A in millimetres: <input id='sizeA' type=text value=190></div>
+	    <div>Coin size in millimetres: <input id='coinSize' type=text value=26></div>
+	    <input type=button value=Generate onClick='generate()'>
+	    <br><br>
+	</form>
+    <div>Example for A4, the size A is different for each printer model.</div>
+    <img src="../../../../images/sample.jpg">
+    </div>
+    <div id=images style='display:none;' >
+	<div id=info style='text-align: center;'><input type=button onClick='hide("info")' value="click on image to dissapears..."></div>
+    </div>
+ </body>
+<script>
+
+    var dpi = 300;
+    var mm_in = 25.4;
+    var c_width;
+    var mm_width;
+
+	const coins = ["1) Trap Masters/Sobersu's BLASTERMIND_icon_logo.png","1) Trap Masters/Sobersu's BUSHWHACK_icon_logo.png","1) Trap Masters/Sobersu's ENIGMA_icon_logo.png","1) Trap Masters/Sobersu's GEARSHIFT_icon_logo.png","1) Trap Masters/Sobersu's GUSTO_icon_logo.png","1) Trap Masters/Sobersu's HEAD RUSH_icon_logo.png","1) Trap Masters/Sobersu's JAWBREAKER_icon_logo.png","1) Trap Masters/Sobersu's KA-BOOM_icon_logo.png","1) Trap Masters/Sobersu's KNIGHT LIGHT_icon_logo.png","1) Trap Masters/Sobersu's KNIGHT MARE_icon_logo.png","1) Trap Masters/Sobersu's KRYPT KING_icon_logo.png","1) Trap Masters/Sobersu's LOB-STAR_icon_logo.png","1) Trap Masters/Sobersu's SHORT CUT_icon_logo.png","1) Trap Masters/Sobersu's SNAP SHOT_icon_logo.png","1) Trap Masters/Sobersu's THUNDERBOLT_icon_logo.png","1) Trap Masters/Sobersu's TUFF LUCK_icon_logo.png","1) Trap Masters/Sobersu's WALLOP_icon_logo.png","1) Trap Masters/Sobersu's WILDFIRE_icon_logo.png","2) New (Series 1)/Sobersu's BAT SPIN_icon_logo.png","2) New (Series 1)/Sobersu's BLACKOUT_icon_logo.png","2) New (Series 1)/Sobersu's BLADES_icon_logo.png","2) New (Series 1)/Sobersu's CHOPPER_icon_logo.png","2) New (Series 1)/Sobersu's COBRA CADABRA_icon_logo.png","2) New (Series 1)/Sobersu's DEJA VU_icon_logo.png","2) New (Series 1)/Sobersu's ECHO_icon_logo.png","2) New (Series 1)/Sobersu's FIST BUMP_icon_logo.png","2) New (Series 1)/Sobersu's FLING KONG_icon_logo.png","2) New (Series 1)/Sobersu's FLIP WRECK_icon_logo.png","2) New (Series 1)/Sobersu's FOOD FIGHT_icon_logo.png","2) New (Series 1)/Sobersu's FUNNY BONE_icon_logo.png","2) New (Series 1)/Sobersu's HIGH FIVE_icon_logo.png","2) New (Series 1)/Sobersu's ROCKY ROLL_icon_logo.png","2) New (Series 1)/Sobersu's SPOTLIGHT_icon_logo.png","2) New (Series 1)/Sobersu's TORCH_icon_logo.png","2) New (Series 1)/Sobersu's TRAIL BLAZER_icon_logo.png","2) New (Series 1)/Sobersu's TREAD HEAD_icon_logo.png","3) Returning (Series 2, 3, and 4)/Sobersu's FIZZY FRENZY POP FIZZ_series3_icon_logo.png","3) Returning (Series 2, 3, and 4)/Sobersu's FULL BLAST JET-VAC_series3_icon_logo.png","3) Returning (Series 2, 3, and 4)/Sobersu's HOG WILD FRYNO_series2_icon_logo.png","3) Returning (Series 2, 3, and 4)/Sobersu's SURE SHOT SHROOMBOOM_series2_icon_logo.png","3) Returning (Series 2, 3, and 4)/Sobersu's TIDAL WAVE GILL GRUNT_series4_icon_logo.png","4) Eon's Elite/fruitsnack's elite chop chop back.png","4) Eon's Elite/fruitsnack's elite eruptor back.png","4) Eon's Elite/fruitsnack's elite gill grunt back.png","4) Eon's Elite/fruitsnack's elite spyro back.png","4) Eon's Elite/fruitsnack's elite stealth elf back.png","4) Eon's Elite/fruitsnack's elite terrafin back.png","4) Eon's Elite/fruitsnack's elite trigger happy back.png","4) Eon's Elite/fruitsnack's elite whirlwind back.png","5) Minis/1) From Sypro's Adventure/Sobersu's GILL RUNT_mini_icon_logo.png","5) Minis/1) From Sypro's Adventure/Sobersu's TERRABITE_mini_icon_logo.png","5) Minis/1) From Sypro's Adventure/Sobersu's TRIGGER SNAPPY_mini_icon_logo.png","5) Minis/1) From Sypro's Adventure/Sobersu's WHISPER ELF_mini_icon_logo.png","5) Minis/2) From Giants/Sobersu's BARKLEY_mini_icon_logo.png","5) Minis/2) From Giants/Sobersu's EYE SMALL_mini_icon_logo.png","5) Minis/2) From Giants/Sobersu's MINI JINI_mini_icon_logo.png","5) Minis/2) From Giants/Sobersu's THUMPLING_mini_icon_logo.png","5) Minis/3) New/Sobersu's BOP_mini_icon_logo.png","5) Minis/3) New/Sobersu's BREEZE_mini_icon_logo.png","5) Minis/3) New/Sobersu's DROBIT_mini_icon_logo.png","5) Minis/3) New/Sobersu's HIJINX_mini_icon_logo.png","5) Minis/3) New/Sobersu's PET VAC_mini_icon_logo.png","5) Minis/3) New/Sobersu's SMALL FRY_mini_icon_logo.png","5) Minis/3) New/Sobersu's SPRY_mini_icon_logo.png","5) Minis/3) New/Sobersu's WEERUPTOR_mini_icon_logo.png","6) Magic Items/1) Expansion Packs/Sobersu's MIDNIGHT MUSEUM_icon_logo.png","6) Magic Items/1) Expansion Packs/Sobersu's SUNSCRAPER SPIRE_icon_logo.png","6) Magic Items/2) Adventure Packs/Sobersu's MIRROR OF MYSTERY_icon_logo.png","6) Magic Items/2) Adventure Packs/Sobersu's NIGHTMARE EXPRESS_icon_logo.png","6) Magic Items/2) Magic Items/Sobersu's HAND OF FATE_icon_logo.png","6) Magic Items/2) Magic Items/Sobersu's LEGENDARY HAND OF FATE_icon_logo.png","6) Magic Items/2) Magic Items/Sobersu's PIGGY BANK_icon_logo.png","6) Magic Items/2) Magic Items/Sobersu's ROCKET RAM_icon_logo.png","6) Magic Items/2) Magic Items/Sobersu's TIKI SPEAKY_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's air trap_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's dark trap_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's earth trap_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's fire trap_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's kaos trap_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's life trap_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's light trap_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's magic trap_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's tech trap_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's undead trap_icon_logo.png","7) Traps/1) Crystal Traps/Sobersu's water trap_icon_logo.png","7) Traps/3) Trappable Villains/Air/fruitsnack's bad juju.png","7) Traps/3) Trappable Villains/Air/fruitsnack's buzzer beak.png","7) Traps/3) Trappable Villains/Air/fruitsnack's dreamcatcher.png","7) Traps/3) Trappable Villains/Air/fruitsnack's krankenstein.png","7) Traps/3) Trappable Villains/Dark/fruitsnack's eye scream.png","7) Traps/3) Trappable Villains/Dark/fruitsnack's fisticuffs.png","7) Traps/3) Trappable Villains/Dark/fruitsnack's nightshade.png","7) Traps/3) Trappable Villains/Dark/fruitsnack's tae kwon crow.png","7) Traps/3) Trappable Villains/Earth/fruitsnack's chomp quest.png","7) Traps/3) Trappable Villains/Earth/fruitsnack's golden queen.png","7) Traps/3) Trappable Villains/Earth/fruitsnack's grave clobber.png","7) Traps/3) Trappable Villains/Earth/fruitsnack's tussle sprout.png","7) Traps/3) Trappable Villains/Fire/fruitsnack's chef pepper jack.png","7) Traps/3) Trappable Villains/Fire/fruitsnack's grinnade.png","7) Traps/3) Trappable Villains/Fire/fruitsnack's scrap shooter.png","7) Traps/3) Trappable Villains/Fire/fruitsnack's smoke scream.png","7) Traps/3) Trappable Villains/Kaos/fruitsnack's kaos back.png","7) Traps/3) Trappable Villains/Life/fruitsnack's broccoli guy.png","7) Traps/3) Trappable Villains/Life/fruitsnack's chompy mage.png","7) Traps/3) Trappable Villains/Life/fruitsnack's chompy.png","7) Traps/3) Trappable Villains/Life/fruitsnack's cuckoo clocker.png","7) Traps/3) Trappable Villains/Life/fruitsnack's sheep creep.png","7) Traps/3) Trappable Villains/Life/fruitsnack's shield shredder.png","7) Traps/3) Trappable Villains/Light/fruitsnack's blaster-tron.png","7) Traps/3) Trappable Villains/Light/fruitsnack's eye five.png","7) Traps/3) Trappable Villains/Light/fruitsnack's lob goblin.png","7) Traps/3) Trappable Villains/Light/fruitsnack's luminous.png","7) Traps/3) Trappable Villains/Magic/fruitsnack's bomb shell.png","7) Traps/3) Trappable Villains/Magic/fruitsnack's pain-yatta.png","7) Traps/3) Trappable Villains/Magic/fruitsnack's rage mage.png","7) Traps/3) Trappable Villains/Tech/fruitsnack's brawlrus.png","7) Traps/3) Trappable Villains/Tech/fruitsnack's bruiser cruiser.png","7) Traps/3) Trappable Villains/Tech/fruitsnack's dr. krankcase.png","7) Traps/3) Trappable Villains/Tech/fruitsnack's mab lobs.png","7) Traps/3) Trappable Villains/Tech/fruitsnack's shrednaught.png","7) Traps/3) Trappable Villains/Tech/fruitsnack's trolling thunder.png","7) Traps/3) Trappable Villains/Undead/fruitsnack's bone chompy.png","7) Traps/3) Trappable Villains/Undead/fruitsnack's hood sickle.png","7) Traps/3) Trappable Villains/Undead/fruitsnack's masker mind.png","7) Traps/3) Trappable Villains/Undead/fruitsnack's wolfgang.png","7) Traps/3) Trappable Villains/Water/fruitsnack's brawl & chain.png","7) Traps/3) Trappable Villains/Water/fruitsnack's chill bill.png","7) Traps/3) Trappable Villains/Water/fruitsnack's cross crow.png","7) Traps/3) Trappable Villains/Water/fruitsnack's slobber trap.png","7) Traps/3) Trappable Villains/Water/fruitsnack's the gulper.png","7) Traps/3) Trappable Villains/Water/fruitsnack's threatpack.png","7) Traps/4) Trappable Villain Variants/fruitsnack's outlaw brawl & chain back.png","7) Traps/4) Trappable Villain Variants/fruitsnack's rebel lob goblin back.png","7) Traps/4) Trappable Villain Variants/fruitsnack's red hot tussle sprout back.png","7) Traps/4) Trappable Villain Variants/fruitsnack's riot shield shredder back.png","7) Traps/4) Trappable Villain Variants/fruitsnack's steamed broccoli guy back.png","7) Traps/4) Trappable Villain Variants/fruitsnack's steampunk shrednaught back.png","8) In-Game Variants/1) In-Game Variants/Sobersu's DARK FOOD FIGHT_icon_logo.png","8) In-Game Variants/1) In-Game Variants/Sobersu's DARK SNAP SHOT_icon_logo.png","8) In-Game Variants/1) In-Game Variants/Sobersu's DARK WILDFIRE_icon_logo.png","8) In-Game Variants/1) In-Game Variants/Sobersu's KING COBRA CADABRA_icon_logo.png","8) In-Game Variants/1) In-Game Variants/Sobersu's LOVE POTION POP FIZZ_series3_icon_logo.png","8) In-Game Variants/1) In-Game Variants/Sobersu's NITRO HEAD RUSH_icon_logo.png","8) In-Game Variants/1) In-Game Variants/Sobersu's NITRO KRYPT KING_icon_logo.png","8) In-Game Variants/1) In-Game Variants/Sobersu's WINTERFEST LOB-STAR_icon_logo.png","8) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY BLADES_icon_logo.png","8) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY BUSHWHACK_icon_logo.png","8) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY DEJA VU_icon_logo.png","8) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY JAWBREAKER_icon_logo.png","8) In-Game Variants/3) Minis/Sobersu's EGGSELLENT WEERUPTOR_mini_icon_logo.png","8) In-Game Variants/3) Minis/Sobersu's GNARLY BARKLEY_mini_icon_logo.png","8) In-Game Variants/3) Minis/Sobersu's POWER PUNCH PET VAC_mini_icon_logo.png"];
+
+
+    function init_scale(width, dpi)
+    {
+	var canvas = document.getElementById("scale_1px");
+	var font_height = 8;
+	var c_height = 30;
+	var s_height = c_height / 2 - 1;
+
+	c_width = width / mm_in * dpi;
+	mm_width = width;
+
+	canvas.width = parseInt(c_width);
+	canvas.height = 1;
+
+	canvas = document.getElementById("scale");
+
+	canvas.width = parseInt(c_width);
+	canvas.height = c_height;
+
+	const ctx = canvas.getContext("2d");
+	
+	ctx.font = font_height + "px serif";
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - 2, 0);
+	ctx.lineTo(canvas.width - 2, c_height);
+	ctx.stroke();
+	
+	for ( i = 0 ; i < width ; i++ )
+	{
+	    pos = i / width * c_width + 1;
+
+	    if ( i % 10 == 0 )
+	    {
+		ctx.fillText( i + " mm", pos + 4, c_height - s_height + font_height );
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		ctx.lineWidth = 1;
+		h = s_height / 2;
+	    }
+
+	    ctx.beginPath();
+	    ctx.moveTo(pos, c_height);
+	    ctx.lineTo(pos, c_height - h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in * 16; i++ )
+	{
+	    pos = i * mm_in / 16 / width * c_width + 1;
+	    h = 10;
+	    if ( i % 16 == 0 )
+	    {
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		if ( i % 8 == 0 )
+		{
+		    h = s_height * 3 / 4;
+		    ctx.lineWidth = 2;
+		}
+		else
+		{
+		    if ( i % 2 == 0 )
+			h = s_height * 3 / 5;
+		    else
+			h = s_height * 3 / 6;
+		}
+		ctx.lineWidth = 1;
+	    }
+	    ctx.beginPath();
+	    ctx.moveTo(pos, 0);
+	    ctx.lineTo(pos, h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in  ; i++ )
+	{
+	    pos = i * mm_in / width * c_width;
+	    ctx.fillText( i + " in", pos + 4, s_height);
+	}
+    }
+
+    function hide(id)
+    {
+	document.getElementById(id).style.display = "none";
+    }
+
+    function generate()
+    {
+	document.getElementById("scale").style.display = "inline";
+	document.getElementById("scale_1px").style.display = "inline";
+	document.getElementById("images").style.display = "inline";
+	init_scale(document.getElementById("sizeA").value, dpi);
+	hide("start_form");
+
+	coin_size = document.getElementById("coinSize").value;
+
+	var cs = parseInt(coin_size / mm_width * c_width);
+
+	imgs = document.getElementById("images");
+	for (let i=0; i < coins.length; i++)
+	{
+	    var img = document.createElement('img');
+            img.src = coins[i];
+
+	    
+	    img.style.height = cs + "px";
+	    img.style.width = cs + "px";
+	    img.id = 'im' + i;
+	    img.onclick = function(){hide('im' + i);}
+	    img.style.paddingRight = '2px';
+
+            imgs.appendChild(img);
+	}
+
+    }
+
+</script>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+ <body>
+    <canvas id='scale_1px' style='display:none;'></canvas>
+    <canvas id='scale' style='display:none;' onClick='hide("scale")'></canvas>
+    <div id='start_form'>
+	<form>
+	    <div>Size A in millimetres: <input id='sizeA' type=text value=190></div>
+	    <div>Coin size in millimetres: <input id='coinSize' type=text value=26></div>
+	    <input type=button value=Generate onClick='generate()'>
+	    <br><br>
+	</form>
+    <div>Example for A4, the size A is different for each printer model.</div>
+    <img src="../../../../images/sample.jpg">
+    </div>
+    <div id=images style='display:none;' >
+	<div id=info style='text-align: center;'><input type=button onClick='hide("info")' value="click on image to dissapears..."></div>
+    </div>
+ </body>
+<script>
+
+    var dpi = 300;
+    var mm_in = 25.4;
+    var c_width;
+    var mm_width;
+
+	const coins = ["1) Figures/Sobersu's BASH_icon_logo.png","1) Figures/Sobersu's BOOMER_icon_logo.png","1) Figures/Sobersu's CAMO_icon_logo.png","1) Figures/Sobersu's CHOP CHOP_icon_logo.png","1) Figures/Sobersu's CYNDER_icon_logo.png","1) Figures/Sobersu's DINO-RANG_icon_logo.png","1) Figures/Sobersu's DOUBLE TROUBLE_icon_logo.png","1) Figures/Sobersu's DRILL SERGEANT_icon_logo.png","1) Figures/Sobersu's DROBOT_icon_logo.png","1) Figures/Sobersu's ERUPTOR_icon_logo.png","1) Figures/Sobersu's FLAMESLINGER_icon_logo.png","1) Figures/Sobersu's GHOST ROASTER_icon_logo.png","1) Figures/Sobersu's GILL GRUNT_icon_logo.png","1) Figures/Sobersu's HEX_icon_logo.png","1) Figures/Sobersu's IGNITOR_icon_logo.png","1) Figures/Sobersu's LIGHTNING ROD_icon_logo.png","1) Figures/Sobersu's PRISM BREAK_icon_logo.png","1) Figures/Sobersu's SLAM BAM_icon_logo.png","1) Figures/Sobersu's SONIC BOOM_icon_logo.png","1) Figures/Sobersu's SPYRO_icon_logo.png","1) Figures/Sobersu's STEALTH ELF_icon_logo.png","1) Figures/Sobersu's STUMP SMASH_icon_logo.png","1) Figures/Sobersu's SUNBURN_icon_logo.png","1) Figures/Sobersu's TERRAFIN_icon_logo.png","1) Figures/Sobersu's TRIGGER HAPPY_icon_logo.png","1) Figures/Sobersu's VOODOOD_icon_logo.png","1) Figures/Sobersu's WARNADO_icon_logo.png","1) Figures/Sobersu's WHAM-SHELL_icon_logo.png","1) Figures/Sobersu's WHIRLWIND_icon_logo.png","1) Figures/Sobersu's WRECKING BALL_icon_logo.png","1) Figures/Sobersu's ZAP_icon_logo.png","1) Figures/Sobersu's ZOOK_icon_logo.png","2) Magic Items/1) Adventure Packs/Sobersu's DARKLIGHT CRYPT_icon_logo.png","2) Magic Items/1) Adventure Packs/Sobersu's DRAGON_S PEAK_icon_logo.png","2) Magic Items/1) Adventure Packs/Sobersu's EMPIRE OF ICE_icon_logo.png","2) Magic Items/1) Adventure Packs/Sobersu's PIRATE SEAS_icon_logo.png","2) Magic Items/2) Battle Arena/Sobersu's VOLCANIC VAULT_icon_logo.png","2) Magic Items/3) Magic Items/Sobersu's ANVIL RAIN_icon_logo.png","2) Magic Items/3) Magic Items/Sobersu's GHOST SWORDS_icon_logo.png","2) Magic Items/3) Magic Items/Sobersu's HEALING ELIXIR_icon_logo.png","2) Magic Items/3) Magic Items/Sobersu's HIDDEN TREASURE_icon_logo.png","2) Magic Items/3) Magic Items/Sobersu's SKY IRON SHIELD_icon_logo.png","2) Magic Items/3) Magic Items/Sobersu's SPARX THE DRAGONFLY_icon_logo.png","2) Magic Items/3) Magic Items/Sobersu's TIME TWISTER_icon_logo.png","2) Magic Items/3) Magic Items/Sobersu's WINGED BOOTS_icon_logo.png","3) Sidekicks/Sobersu's GILL RUNT_icon_logo.png","3) Sidekicks/Sobersu's TERRABITE_icon_logo.png","3) Sidekicks/Sobersu's TRIGGER SNAPPY_icon_logo.png","3) Sidekicks/Sobersu's WHISPER ELF_icon_logo.png","4) In-Game Variants/1) Variants/Sobersu's DARK SPYRO_icon_logo.png","4) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY BASH_icon_logo.png","4) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY CHOP CHOP_icon_logo.png","4) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY SPYRO_icon_logo.png","4) In-Game Variants/2) Legendaries/Sobersu's LEGENDARY TRIGGER HAPPY_icon_logo.png","5) Chase Variants/Cha0s's Blue Bash Icon Logo.png","5) Chase Variants/Cha0s's Chrome Spyro Icon Logo.png","5) Chase Variants/Cha0s's Crystal Clear Cynder Icon Logo.png","5) Chase Variants/Cha0s's Crystal Clear Stealth Elf Icon Logo.png","5) Chase Variants/Cha0s's Crystal Clear Wham Shell Icon Logo.png","5) Chase Variants/Cha0s's Crystal Clear Whirlwind Icon Logo.png","5) Chase Variants/Cha0s's Flocked Stump Smash Icon Logo.png","5) Chase Variants/Cha0s's Glow In The Dark Warnado Icon Logo.png","5) Chase Variants/Cha0s's Glow In The Dark Wrecking Ball Icon Logo.png","5) Chase Variants/Cha0s's Glow In The Dark Zap Icon Logo.png","5) Chase Variants/Cha0s's Gold Chop Chop Icon Logo.png","5) Chase Variants/Cha0s's Gold Drill Sergeant Icon Logo.png","5) Chase Variants/Cha0s's Gold Flameslinger Icon Logo.png","5) Chase Variants/Cha0s's Green Gill Grunt Icon Logo.png","5) Chase Variants/Cha0s's Metallic Purple Cynder Icon Logo.png","5) Chase Variants/Cha0s's Pearl Hex Icon Logo.png","5) Chase Variants/Cha0s's Red Camo Icon Logo.png","5) Chase Variants/Cha0s's Red Drill Sergeant Icon Logo.png","5) Chase Variants/Cha0s's Silver Boomer Icon Logo.png","5) Chase Variants/Cha0s's Silver Dino-Rang Icon Logo.png","5) Chase Variants/Cha0s's Silver Eruptor Icon Logo.png"];
+
+
+    function init_scale(width, dpi)
+    {
+	var canvas = document.getElementById("scale_1px");
+	var font_height = 8;
+	var c_height = 30;
+	var s_height = c_height / 2 - 1;
+
+	c_width = width / mm_in * dpi;
+	mm_width = width;
+
+	canvas.width = parseInt(c_width);
+	canvas.height = 1;
+
+	canvas = document.getElementById("scale");
+
+	canvas.width = parseInt(c_width);
+	canvas.height = c_height;
+
+	const ctx = canvas.getContext("2d");
+	
+	ctx.font = font_height + "px serif";
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - 2, 0);
+	ctx.lineTo(canvas.width - 2, c_height);
+	ctx.stroke();
+	
+	for ( i = 0 ; i < width ; i++ )
+	{
+	    pos = i / width * c_width + 1;
+
+	    if ( i % 10 == 0 )
+	    {
+		ctx.fillText( i + " mm", pos + 4, c_height - s_height + font_height );
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		ctx.lineWidth = 1;
+		h = s_height / 2;
+	    }
+
+	    ctx.beginPath();
+	    ctx.moveTo(pos, c_height);
+	    ctx.lineTo(pos, c_height - h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in * 16; i++ )
+	{
+	    pos = i * mm_in / 16 / width * c_width + 1;
+	    h = 10;
+	    if ( i % 16 == 0 )
+	    {
+		ctx.lineWidth = 2;
+		h = s_height;
+	    }
+	    else
+	    {
+		if ( i % 8 == 0 )
+		{
+		    h = s_height * 3 / 4;
+		    ctx.lineWidth = 2;
+		}
+		else
+		{
+		    if ( i % 2 == 0 )
+			h = s_height * 3 / 5;
+		    else
+			h = s_height * 3 / 6;
+		}
+		ctx.lineWidth = 1;
+	    }
+	    ctx.beginPath();
+	    ctx.moveTo(pos, 0);
+	    ctx.lineTo(pos, h);
+	    ctx.stroke();
+	}
+
+	for ( i = 0 ; i < width / mm_in  ; i++ )
+	{
+	    pos = i * mm_in / width * c_width;
+	    ctx.fillText( i + " in", pos + 4, s_height);
+	}
+    }
+
+    function hide(id)
+    {
+	document.getElementById(id).style.display = "none";
+    }
+
+    function generate()
+    {
+	document.getElementById("scale").style.display = "inline";
+	document.getElementById("scale_1px").style.display = "inline";
+	document.getElementById("images").style.display = "inline";
+	init_scale(document.getElementById("sizeA").value, dpi);
+	hide("start_form");
+
+	coin_size = document.getElementById("coinSize").value;
+
+	var cs = parseInt(coin_size / mm_width * c_width);
+
+	imgs = document.getElementById("images");
+	for (let i=0; i < coins.length; i++)
+	{
+	    var img = document.createElement('img');
+            img.src = coins[i];
+
+	    
+	    img.style.height = cs + "px";
+	    img.style.width = cs + "px";
+	    img.id = 'im' + i;
+	    img.onclick = function(){hide('im' + i);}
+	    img.style.paddingRight = '2px';
+
+            imgs.appendChild(img);
+	}
+
+    }
+
+</script>
+</html>
