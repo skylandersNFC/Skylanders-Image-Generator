@@ -1,0 +1,1 @@
+const cards = ["1) Senseis/Ember.jpg","7) Unreleased/Goldie/Sobersu's GOLDIE_knight_face.jpg","7) Unreleased/Heartbreaker Buckshot/Sobersu's HEARTBREAKER_BUCKSHOT_bowslinger_face.jpg"];

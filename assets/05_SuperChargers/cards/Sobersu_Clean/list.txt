@@ -1,0 +1,1 @@
+const cards = ["Superchargers/Splat.jpg","Superchargers/Splatter Splasher.jpg"];

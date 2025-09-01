@@ -1,0 +1,1 @@
+const cards = ["Chase/Clear Starcast.jpg","Chase/DEC-Ember.jpg","Chase/HBBStarcast.jpg","Chase/Orange Chain Reaction.jpg","Chase/Pink Barbella.jpg","Chase/Rock Candy- Pain Yatta.jpg"];

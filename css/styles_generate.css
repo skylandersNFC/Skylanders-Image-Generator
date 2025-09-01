@@ -1,0 +1,87 @@
+@media print {
+  @page { margin: 10mm 5mm; }
+  html, body { margin: 0; padding: 0; }
+  * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .card, .coin {
+    width: var(--w-mm) !important;
+    height: var(--h-mm) !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  #preview-area, #info, #instructions { display: none !important; }
+  #print-area { display: block !important; }
+}
+
+body { font-family: sans-serif; }
+
+#start_form, #start_form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+#start_form form { gap: 10px; }
+
+.btn-blue, select, input[type=text] {
+  border-radius: 6px;
+  font-size: 14px;
+}
+.btn-blue {
+  background: #007BFF;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-blue:hover { background: #0056b3; }
+
+select, #cardSize, #coinSize {
+  background: #fff;
+  border: 1px solid #007BFF;
+  padding: 6px 12px;
+  cursor: pointer;
+  text-align: center;
+  width: 80px;
+}
+select:focus, input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,123,255,.35);
+}
+
+.previews {
+  margin-top: 10px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.preview img {
+  max-width: 300px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+#preview-area, #print-area {
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3px;
+}
+
+#print-area { display: none; width: var(--safe-width); }
+
+.print-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 0.3mm;
+  margin-bottom: 0.3mm;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+#info, #instructions { margin: 10px 0; }
+.highlight { color: red; font-weight: bold; }

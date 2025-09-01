@@ -1,0 +1,1 @@
+const cards = ["Imaginators/01.jpg","Imaginators/02.jpg","Imaginators/03.jpg","Imaginators/04.jpg","Imaginators/05.jpg","Imaginators/06.jpg","Imaginators/07.jpg","Imaginators/08.jpg","Imaginators/09.jpg","Imaginators/10.jpg","Imaginators/11.jpg","Imaginators/12.jpg","Imaginators/13.jpg"];
