@@ -5,7 +5,7 @@ import sys
 os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
 
 def convert_to_js_structure(name, filenames):
-    quoted_filenames = [f'"{name}"' for name in filenames]
+    quoted_filenames = [f'"{fn}"' for fn in filenames]
     return f"const {name} = [{','.join(quoted_filenames)}];\n"
 
 def get_all_files_with_ext(root_dir=".", extensions=(".jpg", ".png")):
