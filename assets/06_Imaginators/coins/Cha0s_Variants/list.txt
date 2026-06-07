@@ -1,0 +1,1 @@
+const coins = ["1) Variants/fruitsnack's crystal clear starcast.png","1) Variants/fruitsnack's dec-ember.png","1) Variants/fruitsnack's happy birthday ben starcast.png","1) Variants/fruitsnack's orange chain reaction.png","1) Variants/fruitsnack's pink barbella.png","1) Variants/fruitsnack's rock candy pain yatta.png"];
