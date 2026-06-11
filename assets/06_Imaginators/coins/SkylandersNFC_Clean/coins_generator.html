@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Coins Generator</title>
+  <link rel="stylesheet" href="../../../../css/styles_generate.css">
+</head>
+<body>
+
+  <div id="start_form">
+    <form>
+      <div>
+        <label for="paperType"><b>Paper Type:</b></label>
+        <select id="paperType">
+          <option value="A4">A4</option>
+          <option value="Letter">Letter</option>
+        </select>
+        <input type="button" value="Generate" onclick="generate()" class="btn-blue">
+      </div>
+      <div>
+        <label for="coinSize"><b>NFC Coin Size:</b></label>
+        <input id="coinSize" type="text" value="26 mm">
+      </div>
+    </form>
+
+    <div>A4 and Letter are auto-scaled with a margin reserved for safe printing.</div>
+
+    <div class="previews">
+      <div class="preview" style="text-align:center;">
+        <b>A4 Example (297 × 210 mm)</b><br>
+        <img src="../../../../images/sample.jpg" alt="A4 Preview">
+      </div>
+    </div>
+  </div>
+
+  <div id="images" style="display:none;">
+    <div id="info" style="text-align:center;">
+      <input type="button" value="Print" onclick="window.print()" class="btn-blue">
+    </div>
+    <div id="instructions" style="text-align:center;">
+      Click an image to <span class="highlight">remove</span> it.<br>
+      When <span class="highlight">done</span>, press <span class="highlight">Print</span>.
+    </div>
+    <div id="preview-area"></div>
+    <div id="print-area"></div>
+  </div>
+
+  <script src="../../../../scripts/generator_coins.js"></script>
+  <script src="list.txt"></script>
+</body>
+</html>
