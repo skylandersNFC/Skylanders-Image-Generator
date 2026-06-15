@@ -5,31 +5,38 @@
 }
 
 html {
+    background: no-repeat center center fixed;
     background-size: cover;
 }
 
 html[data-page="spyro"] {
     background: url('../images/spyro.webp') no-repeat center center fixed;
+    background-size: cover;
 }
 
 html[data-page="giants"] {
     background: url('../images/giants.webp') no-repeat center center fixed;
+    background-size: cover;
 }
 
 html[data-page="swapforce"] {
     background: url('../images/swapforce.webp') no-repeat center center fixed;
+    background-size: cover;
 }
 
 html[data-page="trapteam"] {
     background: url('../images/trapteam.webp') no-repeat center center fixed;
+    background-size: cover;
 }
 
 html[data-page="superchargers"] {
     background: url('../images/superchargers.webp') no-repeat center center fixed;
+    background-size: cover;
 }
 
 html[data-page="imaginators"] {
     background: url('../images/imaginators.webp') no-repeat center center fixed;
+    background-size: cover;
 }
 
 body {
