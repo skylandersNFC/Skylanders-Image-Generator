@@ -39,6 +39,11 @@ html[data-page="imaginators"] {
     background-size: cover;
 }
 
+html[data-page="creators"] {
+    background: url('../images/creators.webp') no-repeat center center fixed;
+    background-size: cover;
+}
+
 body {
     font: 14px/1.5 Arial, Helvetica, sans-serif;
     margin: 0;
